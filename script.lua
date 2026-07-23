@@ -5,11 +5,11 @@ local Window = Luna:CreateWindow({
     Subtitle = nil,
     LogoID = nil,
     LoadingEnabled = true,
-    LoadingTitle = "OE HUB",
-    LoadingSubtitle = "by saldı",
+    LoadingTitle = "wequil HUB",
+    LoadingSubtitle = "by wequil",
     ConfigSettings = {
         RootFolder = nil,
-        ConfigFolder = "OE Hub"
+        ConfigFolder = "wequil Hub"
     },
     KeySystem = false,
     KeySettings = {}
@@ -17,7 +17,7 @@ local Window = Luna:CreateWindow({
 
 Window:CreateHomeTab({
     SupportedExecutors = {},
-    DiscordInvite = "ZF5fTWPh5a",
+    DiscordInvite = "FmPvdRMVe6",
     Icon = 2,
 })
 
@@ -224,7 +224,7 @@ local espConfig = {
 local activeBoxes = {}
 
 local fovGui = Instance.new("ScreenGui")
-fovGui.Name = "OEHubFOV"
+fovGui.Name = "wequilHubFOV"
 fovGui.ResetOnSpawn = false
 fovGui.Parent = game:GetService("CoreGui")
 
