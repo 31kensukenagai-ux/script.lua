@@ -2,7 +2,7 @@ local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-S
 
 local Window = Luna:CreateWindow({
     Name = "! Torrycxn HUB",
-    Subtitle = "BloxStrike Ultimate Anime Edition ",
+    Subtitle = "BloxStrike Ultimate  ",
     LogoID = nil,
     LoadingEnabled = true,
     LoadingTitle = "! Torrycxn",
