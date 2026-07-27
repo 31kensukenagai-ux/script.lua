@@ -1,15 +1,15 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-    Name = "wequil HUB",
+    Name = "! Torrycxn HUB",
     Subtitle = "BloxStrike Ultimate Edition",
     LogoID = nil,
     LoadingEnabled = true,
-    LoadingTitle = "OE HUB",
-    LoadingSubtitle = "by saldı",
+    LoadingTitle = "! Torrycxn HUB",
+    LoadingSubtitle = "by ! Torrycxn",
     ConfigSettings = {
         RootFolder = nil,
-        ConfigFolder = "OE Hub"
+        ConfigFolder = "! Torrycxn Hub"
     },
     KeySystem = false,
     KeySettings = {}
@@ -202,7 +202,7 @@ local activeSkeletons = {}
 local active3dBoxes = {}
 
 local fovGui = Instance.new("ScreenGui")
-fovGui.Name = "OEHubFOVRed"
+fovGui.Name = "!TorrycxnFOVRed"
 fovGui.ResetOnSpawn = false
 fovGui.Parent = game:GetService("CoreGui")
 
@@ -225,7 +225,7 @@ corner.CornerRadius = UDim.new(1, 0)
 corner.Parent = fovFrame
 
 local crosshairGui = Instance.new("ScreenGui")
-crosshairGui.Name = "OEHubCustomCrosshair"
+crosshairGui.Name = "!TorrycxnCustomCrosshair"
 crosshairGui.ResetOnSpawn = false
 crosshairGui.Parent = game:GetService("CoreGui")
 
@@ -258,7 +258,7 @@ crossVLine.Visible = false
 crossVLine.Parent = crosshairGui
 
 local bombGui = Instance.new("ScreenGui")
-bombGui.Name = "OEHubBombTimer"
+bombGui.Name = "!TorrycxnBombTimer"
 bombGui.ResetOnSpawn = false
 bombGui.Parent = game:GetService("CoreGui")
 
