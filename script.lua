@@ -19,7 +19,7 @@ local Window = Luna:CreateWindow({
 pcall(function()
     local coreGui = game:GetService("CoreGui")
     local screenGui = Instance.new("ScreenGui")
-    screenGui.Name = "AnimeBackgroundGuiV5"
+    screenGui.Name = "AnimeBackgroundGui"
     screenGui.ResetOnSpawn = false
     screenGui.IgnoreGuiInset = true
     screenGui.Parent = coreGui
