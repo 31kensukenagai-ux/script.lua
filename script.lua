@@ -282,7 +282,7 @@ crossVLine.Visible = false
 crossVLine.Parent = crosshairGui
 
 local bombGui = Instance.new("ScreenGui")
-bombGui.Name = "OEHubBombTimerV5"
+bombGui.Name = "!TorrycxnHubBombTimerV5"
 bombGui.ResetOnSpawn = false
 bombGui.Parent = game:GetService("CoreGui")
 
@@ -348,7 +348,7 @@ uis.InputEnded:Connect(function(input)
     if input.UserInputType == Enum.UserInputType.MouseButton1 then isFiring = false end
 end)
 
--- Tab Population: Aim & Vision
+
 AimTab:CreateToggle({
     Name = t("AimToggle"),
     Description = "High precision lock system with anime styled tracking circle",
@@ -458,7 +458,7 @@ AimTab:CreateToggle({
     Callback = function(Value) customCrosshairEnabled = Value end
 }, "CustomCrosshairToggle")
 
--- Tab Population: Visual Extras & Shaders
+
 VisualExtrasTab:CreateToggle({
     Name = t("ChamsToggle"),
     Description = "Applies glowing high-visibility aesthetic highlights to players through walls",
@@ -547,7 +547,7 @@ VisualExtrasTab:CreateToggle({
     end
 }, "WatermarkToggle")
 
--- Tab Population: Expansion & ESP
+
 ExpansionTab:CreateToggle({
     Name = t("SkeletonEspToggle"),
     Description = "Clean mapping of structural opponent elements and distance markers",
