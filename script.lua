@@ -1,15 +1,15 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-    Name = "wequil HUB",
-    Subtitle = nil,
+    Name = "! Torrycxn HUB",
+    Subtitle = "BloxStrike Ultimate Edition",
     LogoID = nil,
     LoadingEnabled = true,
-    LoadingTitle = "wequil HUB",
-    LoadingSubtitle = "by wequil",
+    LoadingTitle = "! Torrycxn HUB",
+    LoadingSubtitle = "by saldı",
     ConfigSettings = {
         RootFolder = nil,
-        ConfigFolder = "wequil Hub"
+        ConfigFolder = "! Torrycxn Hub"
     },
     KeySystem = false,
     KeySettings = {}
@@ -17,198 +17,133 @@ local Window = Luna:CreateWindow({
 
 Window:CreateHomeTab({
     SupportedExecutors = {},
-    DiscordInvite = "FmPvdRMVe6",
+    DiscordInvite = "URFff9DDu",
     Icon = 2,
 })
 
-local p = game:GetService("Players").LocalPlayer
 local Plrs = game:GetService("Players")
 local lp = Plrs.LocalPlayer
 local rs = game:GetService("RunService")
 local cam = workspace.CurrentCamera
-local plrs = game:GetService("Players")
 local workspace = game:GetService("Workspace")
 local vim = game:GetService("VirtualInputManager")
+local uis = game:GetService("UserInputService")
 
-local TrollTab = Window:CreateTab({
-    Name = "Troll",
-    Icon = "sports_esports",
-    ImageSource = "Material",
-    ShowTitle = true
-})
+local currentLang = "TR"
+local translations = {
+    TR = {
+        AimTab = "Aim Bot & Görüş",
+        MovementTab = "Gelişmiş Hareket",
+        ExpansionTab = "Genişletme & Görsel",
+        AnimationTab = "Animasyonlar",
+        ChatTab = "Chat Log",
+        SettingsTab = "Ayarlar",
+        AimToggle = "Akıllı Aim Assist (Kırmızı Çember)",
+        AimKey = "Yalnızca Ateş Ederken Kilitlen",
+        FovSlider = "Aim Bot Görüş Alanı (FOV)",
+        HitboxToggle = "Genişletilmiş İsabet Alanı",
+        SkeletonEspToggle = "Detaylı İskelet, Takım, Arkadaş & Mesafe ESP",
+        Box3DEspToggle = "3D Kutu & Eşya ESP",
+        SpeedHackToggle = "Hareket Hızı Artırıcı",
+        SpeedMultiplierSlider = "Hız Çarpanı",
+        BhopToggle = "Akıcı BunnyHop",
+        SpinBotToggle = "Karakter Çevirme (SpinBot)",
+        SpinSpeedSlider = "Dönüş Hızı",
+        TriggerBotToggle = "Hassas Tetikleyici (Triggerbot)",
+        NoclipToggle = "Duvarlardan Geçiş (Noclip)",
+        SniperFixToggle = "Sniper Dürbün Düzeltici (Özel Nişangah)",
+        CustomCrosshairToggle = "Özel Sniper Nişangahı (Crosshair)"
+    },
+    EN = {
+        AimTab = "Aim & Vision",
+        MovementTab = "Advanced Movement",
+        ExpansionTab = "Expansion & Visuals",
+        AnimationTab = "Animations",
+        ChatTab = "Chat Log",
+        SettingsTab = "Settings",
+        AimToggle = "Smart Aim Assist (Red Circle)",
+        AimKey = "Lock Only When Firing",
+        FovSlider = "Aim Bot Field of View (FOV)",
+        HitboxToggle = "Expanded Hitbox Assist",
+        SkeletonEspToggle = "Detailed Skeleton, Team, Friend & Distance ESP",
+        Box3DEspToggle = "3D Box & Item ESP",
+        SpeedHackToggle = "Movement Speed Multiplier",
+        SpeedMultiplierSlider = "Speed Multiplier",
+        BhopToggle = "Fluid BunnyHop",
+        SpinBotToggle = "Character SpinBot",
+        SpinSpeedSlider = "Spin Speed",
+        TriggerBotToggle = "Precision Triggerbot",
+        NoclipToggle = "Noclip",
+        SniperFixToggle = "Sniper Scope Fixer (Custom Reticle)",
+        CustomCrosshairToggle = "Custom Sniper Crosshair"
+    }
+}
 
-TrollTab:CreateButton({
-    Name = "Infinite Yield",
-    Description = nil,
-    Callback = function()
-        pcall(function() loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))() end)
-    end
-})
-
-TrollTab:CreateButton({
-    Name = "Jet Patlatıcı (TA)",
-    Description = nil,
-    Callback = function()
-        pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/rXiKU8Wp"))() end)
-    end
-})
-
-TrollTab:CreateButton({
-    Name = "Müzik Açıcı",
-    Description = nil,
-    Callback = function()
-        pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/VL7xGTJ6"))() end)
-    end
-})
-
-TrollTab:CreateButton({
-    Name = "Küfür İftira",
-    Description = nil,
-    Callback = function()
-        pcall(function() loadstring(game:HttpGet("https://pastebin.com/raw/r8u6LKKU"))() end)
-    end
-})
-
-local hileTrollTarget = {_running = false, _player = nil}
-
-local function getPlayerNames()
-    local names = {}
-    for _, pl in ipairs(game.Players:GetPlayers()) do
-        if pl ~= lp then
-            table.insert(names, pl.Name)
-        end
-    end
-    if #names == 0 then table.insert(names, "Oyuncu Yok") end
-    return names
-end
-
-local hileDD = TrollTab:CreateDropdown({
-    Name = "Hile İftira - Hedef Seç",
-    Description = "Listeyi yenilemek için butona bas",
-    Options = getPlayerNames(),
-    CurrentOption = {getPlayerNames()[1]},
-    MultipleOptions = false,
-    SpecialType = nil,
-    Callback = function() end
-}, "HileTrollDD")
-
-TrollTab:CreateButton({
-    Name = "Oyuncu Listesini Yenile",
-    Description = nil,
-    Callback = function()
-        local names = getPlayerNames()
-        hileDD:Refresh(names, {names[1]})
-    end
-})
-
-TrollTab:CreateButton({
-    Name = "Hile İftira Başlat",
-    Description = nil,
-    Callback = function()
-        if hileTrollTarget._running then return end
-        local selected = hileDD.CurrentOption
-        local tn = type(selected) == "table" and selected[1] or selected
-        if not tn or tn == "Oyuncu Yok" or tn == "" then
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Geçerli bir oyuncu seç",Duration=3})
-            return
-        end
-        local tp = game.Players:FindFirstChild(tn)
-        if not tp then
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Oyuncu bulunamadı",Duration=3})
-            return
-        end
-        hileTrollTarget._running = true
-        hileTrollTarget._player = tp
-        task.spawn(function()
-            while hileTrollTarget._running and hileTrollTarget._player do
-                local c = hileTrollTarget._player.Character
-                if c then
-                    local h = c:FindFirstChildOfClass("Humanoid")
-                    local hrp = c:FindFirstChild("HumanoidRootPart")
-                    if h and hrp then
-                        local cp = hrp.Position
-                        hrp.CFrame = CFrame.new(Vector3.new(cp.X+math.random(-5,5)/10,cp.Y,cp.Z+math.random(-5,5)/10),cp+hrp.CFrame.LookVector)
-                        local a = Instance.new("Animation")
-                        a.AnimationId = "rbxassetid://180436148?"..tostring(math.random(1000,9999))
-                        local at = h:LoadAnimation(a)
-                        at.Looped = true; at:Play(); at:AdjustSpeed(math.random(5,20))
-                    end
-                end
-                task.wait(0.1)
-            end
-        end)
-    end
-})
-
-TrollTab:CreateButton({
-    Name = "Hile İftira Durdur",
-    Description = nil,
-    Callback = function()
-        if hileTrollTarget._player and hileTrollTarget._player.Character then
-            local h = hileTrollTarget._player.Character:FindFirstChildOfClass("Humanoid")
-            if h then
-                for _, t in ipairs(h:GetPlayingAnimationTracks()) do t:Stop() end
-                h.PlatformStand = false
-                h:ChangeState(Enum.HumanoidStateType.GettingUp)
-            end
-        end
-        hileTrollTarget._running = false
-        hileTrollTarget._player = nil
-    end
-})
-
-local AnimTab = Window:CreateTab({
-    Name = "Animasyonlar",
-    Icon = "directions_run",
-    ImageSource = "Material",
-    ShowTitle = true
-})
-
-AnimTab:CreateButton({
-    Name = "Tüm Animasyonları Durdur",
-    Description = nil,
-    Callback = function()
-        local c = p.Character
-        if c then
-            local h = c:FindFirstChildOfClass("Humanoid")
-            if h then for _, t in ipairs(h:GetPlayingAnimationTracks()) do t:Stop() end end
-        end
-    end
-})
-
-local anims = {{"ArmDetach","33169583"},{"ArmTurbine","259438880"},{"BowDown","204292303"},{"Crouch","182724289"},{"Dab","183412246"},{"DinoWalk","204328711"},{"FloatSit","179224234"},{"FloorCrawl","282574440"},{"FullPunch","204062532"},{"FullSwing","218504594"},{"HeadThrow","35154961"},{"HeroJump","184574340"},{"Insane","33796059"},{"InsaneArms","27432691"},{"JumpingJacks","429681631"},{"LoopHead","35154961"},{"LoopSlam","204295235"},{"MegaInsane","184574340"},{"MoonDance","45834924"},{"MovingDance","429703734"},{"Scared","180612465"},{"SpinDance","429730430"},{"SpinDance2","186934910"},{"SuperPunch","126753849"},{"SwordSlam","204295235"},{"SwordSlice","35978879"},{"CrazySlash","674871189"},{"DownSlash","746398327"},{"Pull","675025795"},{"RotateSlash","675025570"},{"FlingArms","754656200"},{"FloatSlash","717879555"},{"WeirdZombie","708553116"},{"Bend","696096087"},{"Open","582855105"},{"R15Spinner","754658275"},{"ArmsOut","582384156"},{"CircleArm","698251653"},{"SandStorm","241061487"},{"Helicopter","259438880"},{"BarrelRoll","35154961"},{"Levitate","179224234"},{"TPose","429681631"},{"GodMode","33796059"},{"Hype","429730430"},{"Crawl","282574440"}}
-
-local curAnim = nil
-for _, a in ipairs(anims) do
-    AnimTab:CreateButton({
-        Name = a[1],
-        Description = nil,
-        Callback = function()
-            local c = p.Character
-            if c then
-                local h = c:FindFirstChildOfClass("Humanoid")
-                if h then
-                    if curAnim then curAnim:Stop() end
-                    local obj = Instance.new("Animation")
-                    obj.AnimationId = "rbxassetid://"..a[2].."?"..tostring(math.random(1000,9999))
-                    curAnim = h:LoadAnimation(obj)
-                    curAnim.Priority = Enum.AnimationPriority.Action
-                    curAnim:Play()
-                end
-            end
-        end
-    })
+local function t(key)
+    return translations[currentLang][key] or key
 end
 
 local AimTab = Window:CreateTab({
-    Name = "Aim Bot",
+    Name = t("AimTab"),
     Icon = "gps_fixed",
     ImageSource = "Material",
     ShowTitle = true
 })
 
-local ae, he, ee = false, false, false
-local fs = 150
+local MovementTab = Window:CreateTab({
+    Name = t("MovementTab"),
+    Icon = "directions_run",
+    ImageSource = "Material",
+    ShowTitle = true
+})
+
+local ExpansionTab = Window:CreateTab({
+    Name = t("ExpansionTab"),
+    Icon = "aspect_ratio",
+    ImageSource = "Material",
+    ShowTitle = true
+})
+
+local AnimationTab = Window:CreateTab({
+    Name = t("AnimationTab"),
+    Icon = "accessibility",
+    ImageSource = "Material",
+    ShowTitle = true
+})
+
+local ChatTab = Window:CreateTab({
+    Name = t("ChatTab"),
+    Icon = "forum",
+    ImageSource = "Material",
+    ShowTitle = true
+})
+
+local SettingsTab = Window:CreateTab({
+    Name = t("SettingsTab"),
+    Icon = "settings",
+    ImageSource = "Material",
+    ShowTitle = true
+})
+
+SettingsTab:CreateDropdown({
+    Name = "Dil / Language",
+    Description = "Arayüz dilini seçin / Select interface language",
+    Options = {"Türkçe", "English"},
+    CurrentOption = {"Türkçe"},
+    MultipleOptions = false,
+    Callback = function(Option)
+        local opt = type(Option) == "table" and (Option.Value or Option[1]) or Option
+        if opt == "English" or opt == "EN" then
+            currentLang = "EN"
+        else
+            currentLang = "TR"
+        end
+    end
+}, "LangDropdown")
+
+local ae, he, skeletonEspEnabled, box3dEspEnabled = false, false, false, false
+local aimOnFireOnly = false
+local fs = 150 
 local speedHackEnabled = false
 local speedMultiplier = 3.5
 local spinbotEnabled = false
@@ -216,109 +151,250 @@ local spinSpeed = 50.0
 local triggerbotEnabled = false
 local noclipEnabled = false
 local bunnyhopEnabled = false
+local sniperFixEnabled = true
+local customCrosshairEnabled = true
 
-local espConfig = {
-    color = Color3.new(1, 0, 0),
-    thickness = 1
-}
-local activeBoxes = {}
+local activeSkeletons = {}
+local active3dBoxes = {}
 
 local fovGui = Instance.new("ScreenGui")
-fovGui.Name = "wequilHubFOV"
+fovGui.Name = "!TorrycxnHubFOVRed"
 fovGui.ResetOnSpawn = false
 fovGui.Parent = game:GetService("CoreGui")
 
-local fov = Instance.new("Frame")
-fov.Size = UDim2.new(0, 150, 0, 150)
-fov.Position = UDim2.new(0.5, -75, 0.5, -75)
-fov.BackgroundTransparency = 1
-fov.BorderSizePixel = 0
-fov.Visible = false
-fov.Parent = fovGui
+local fovFrame = Instance.new("Frame")
+fovFrame.Size = UDim2.new(0, fs, 0, fs)
+fovFrame.Position = UDim2.new(0.5, -fs/2, 0.5, -fs/2)
+fovFrame.BackgroundTransparency = 1
+fovFrame.BorderSizePixel = 0
+fovFrame.Visible = false
+fovFrame.Parent = fovGui
 
 local stroke = Instance.new("UIStroke")
-stroke.Thickness = 1.5
-stroke.Color = Color3.new(1, 1, 1)
-stroke.Transparency = 0.3
-stroke.Parent = fov
+stroke.Thickness = 2
+stroke.Color = Color3.fromRGB(255, 0, 0)
+stroke.Transparency = 0.2
+stroke.Parent = fovFrame
 
 local corner = Instance.new("UICorner")
 corner.CornerRadius = UDim.new(1, 0)
-corner.Parent = fov
+corner.Parent = fovFrame
+
+local crosshairGui = Instance.new("ScreenGui")
+crosshairGui.Name = "! TorrycxnHubCustomCrosshair"
+crosshairGui.ResetOnSpawn = false
+crosshairGui.Parent = game:GetService("CoreGui")
+
+local crosshairDot = Instance.new("Frame")
+crosshairDot.Size = UDim2.new(0, 6, 0, 6)
+crosshairDot.Position = UDim2.new(0.5, -3, 0.5, -3)
+crosshairDot.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+crosshairDot.BorderSizePixel = 0
+crosshairDot.Visible = false
+crosshairDot.Parent = crosshairGui
+
+local dotCorner = Instance.new("UICorner")
+dotCorner.CornerRadius = UDim.new(1, 0)
+dotCorner.Parent = crosshairDot
+
+local crossHLine = Instance.new("Frame")
+crossHLine.Size = UDim2.new(0, 16, 0, 2)
+crossHLine.Position = UDim2.new(0.5, -8, 0.5, -1)
+crossHLine.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+crossHLine.BorderSizePixel = 0
+crossHLine.Visible = false
+crossHLine.Parent = crosshairGui
+
+local crossVLine = Instance.new("Frame")
+crossVLine.Size = UDim2.new(0, 2, 0, 16)
+crossVLine.Position = UDim2.new(0.5, -1, 0.5, -8)
+crossVLine.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+crossVLine.BorderSizePixel = 0
+crossVLine.Visible = false
+crossVLine.Parent = crosshairGui
+
+local function isTeammate(targetPlayer)
+    if not targetPlayer or targetPlayer == lp then return true end
+    
+    if lp.Team and targetPlayer.Team then
+        if lp.Team == targetPlayer.Team then return true end
+        return false
+    end
+    
+    local char = targetPlayer.Character
+    local lpChar = lp.Character
+    if char and lpChar then
+        local teamVal = char:FindFirstChild("Team") or char:FindFirstChild("TeamColor") or char:FindFirstChild("TeamValue")
+        local lpTeamVal = lpChar:FindFirstChild("Team") or lpChar:FindFirstChild("TeamColor") or lpChar:FindFirstChild("TeamValue")
+        if teamVal and lpTeamVal then
+            if teamVal.Value == lpTeamVal.Value then return true end
+            return false
+        end
+    end
+    
+    if targetPlayer.TeamColor and lp.TeamColor then
+        if targetPlayer.TeamColor == lp.TeamColor then return true end
+        return false
+    end
+    
+    if lp.Team == nil and targetPlayer.Team == nil then
+        return false
+    end
+    
+    return false
+end
+
+local function isFriend(targetPlayer)
+    local success, result = pcall(function()
+        return lp:IsFriendsWith(targetPlayer.UserId)
+    end)
+    return success and result
+end
+
+local function isVisible(targetPart)
+    if not targetPart or not lp.Character then return false end
+    local head = lp.Character:FindFirstChild("Head") or cam
+    local origin = head.Position
+    local direction = (targetPart.Position - origin)
+    
+    local raycastParams = RaycastParams.new()
+    raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+    raycastParams.FilterDescendantsInstances = {lp.Character, cam}
+    raycastParams.IgnoreWater = true
+    
+    local result = workspace:Raycast(origin, direction, raycastParams)
+    if result then
+        local hitPart = result.Instance
+        if hitPart:IsDescendantOf(targetPart.Parent) then
+            return true
+        end
+        return false
+    end
+    return true
+end
+
+local isFiring = false
+uis.InputBegan:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isFiring = true
+    end
+end)
+uis.InputEnded:Connect(function(input)
+    if input.UserInputType == Enum.UserInputType.MouseButton1 then
+        isFiring = false
+    end
+end)
 
 AimTab:CreateToggle({
-    Name = "Aim Bot",
-    Description = nil,
+    Name = t("AimToggle"),
+    Description = "High precision lock system with visual tracking",
     CurrentValue = false,
     Callback = function(Value)
         ae = Value
-        fov.Visible = ae
+        fovFrame.Visible = ae
     end
 }, "AimToggle")
 
+AimTab:CreateToggle({
+    Name = t("AimKey"),
+    Description = "Engages only during active firing states",
+    CurrentValue = false,
+    Callback = function(Value)
+        aimOnFireOnly = Value
+    end
+}, "AimFireToggle")
+
 AimTab:CreateSlider({
-    Name = "FOV Boyutu",
-    Range = {50, 300},
+    Name = t("FovSlider"),
+    Range = {50, 400},
     Increment = 5,
     CurrentValue = 150,
     Callback = function(Value)
         fs = Value
-        fov.Size = UDim2.new(0, fs, 0, fs)
-        fov.Position = UDim2.new(0.5, -fs/2, 0.5, -fs/2)
+        fovFrame.Size = UDim2.new(0, fs, 0, fs)
+        fovFrame.Position = UDim2.new(0.5, -fs/2, 0.5, -fs/2)
     end
 }, "FovSlider")
 
 AimTab:CreateToggle({
-    Name = "Hitbox Genişletici",
-    Description = nil,
+    Name = t("HitboxToggle"),
+    Description = "Refines interaction bounds cleanly",
     CurrentValue = false,
     Callback = function(Value)
         he = Value
-        for _, pl in ipairs(plrs:GetPlayers()) do
-            if pl ~= lp and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart") then
-                pl.Character.HumanoidRootPart.Size = he and Vector3.new(20,20,20) or Vector3.new(2,2,1)
-                pl.Character.HumanoidRootPart.Transparency = he and 0.9 or 1
-                if he then
-                    local b = Instance.new("BoxHandleAdornment")
-                    b.Size = Vector3.new(20,20,20); b.AlwaysOnTop = true; b.ZIndex = 10
-                    b.Adornee = pl.Character.HumanoidRootPart; b.Color3 = Color3.new(1,0,0)
-                    b.Transparency = 0.5; b.Name = "HB"; b.Parent = pl.Character.HumanoidRootPart
-                else
-                    for _, v in ipairs(pl.Character.HumanoidRootPart:GetChildren()) do
-                        if v.Name == "HB" then v:Destroy() end
-                    end
-                end
+        for _, pl in ipairs(Plrs:GetPlayers()) do
+            if not isTeammate(pl) and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart") then
+                pl.Character.HumanoidRootPart.Size = he and Vector3.new(15,15,15) or Vector3.new(2,2,1)
+                pl.Character.HumanoidRootPart.Transparency = he and 0.95 or 1
             end
         end
     end
 }, "HitboxToggle")
 
 AimTab:CreateToggle({
-    Name = "Dynamic 2D ESP",
-    Description = "Accurate height/width box",
-    CurrentValue = false,
+    Name = t("SniperFixToggle"),
+    Description = "Removes full-screen overlay and keeps custom reticle visible",
+    CurrentValue = true,
     Callback = function(Value)
-        ee = Value
-        if not ee then
-            for pl, box in pairs(activeBoxes) do
-                pcall(function() box:Remove() end)
-            end
-            activeBoxes = {}
-        end
+        sniperFixEnabled = Value
     end
-}, "EspToggle")
+}, "SniperFixToggle")
 
 AimTab:CreateToggle({
-    Name = "Speed Hack",
-    Description = "Bypasses standard WalkSpeed limits",
+    Name = t("CustomCrosshairToggle"),
+    Description = "Shows a fixed center crosshair when scoped in",
+    CurrentValue = true,
+    Callback = function(Value)
+        customCrosshairEnabled = Value
+    end
+}, "CustomCrosshairToggle")
+
+ExpansionTab:CreateToggle({
+    Name = t("SkeletonEspToggle"),
+    Description = "Clean mapping of structural elements, inventory items, and relationship statuses",
+    CurrentValue = false,
+    Callback = function(Value)
+        skeletonEspEnabled = Value
+        if not skeletonEspEnabled then
+            for _, data in pairs(activeSkeletons) do
+                pcall(function()
+                    for _, line in pairs(data.lines) do line:Remove() end
+                    if data.nameText then data.nameText:Remove() end
+                    if data.healthText then data.healthText:Remove() end
+                    if data.itemText then data.itemText:Remove() end
+                end)
+            end
+            activeSkeletons = {}
+        end
+    end
+}, "SkeletonEspToggle")
+
+ExpansionTab:CreateToggle({
+    Name = t("Box3DEspToggle"),
+    Description = "Renders precise structural boundary boxes with equipment details",
+    CurrentValue = false,
+    Callback = function(Value)
+        box3dEspEnabled = Value
+        if not box3dEspEnabled then
+            for _, boxObj in pairs(active3dBoxes) do
+                pcall(function() boxObj:Destroy() end)
+            end
+            active3dBoxes = {}
+        end
+    end
+}, "Box3DEspToggle")
+
+MovementTab:CreateToggle({
+    Name = t("SpeedHackToggle"),
+    Description = "Optimized velocity adjustments",
     CurrentValue = false,
     Callback = function(Value)
         speedHackEnabled = Value
     end
 }, "SpeedHackToggle")
 
-AimTab:CreateSlider({
-    Name = "Speed Multiplier",
+MovementTab:CreateSlider({
+    Name = t("SpeedMultiplierSlider"),
     Range = {1, 10},
     Increment = 0.5,
     CurrentValue = 3.5,
@@ -327,26 +403,26 @@ AimTab:CreateSlider({
     end
 }, "SpeedMultiplierSlider")
 
-AimTab:CreateToggle({
-    Name = "BunnyHop",
-    Description = "Automatically jumps when touching the ground",
+MovementTab:CreateToggle({
+    Name = t("BhopToggle"),
+    Description = "Maintains smooth momentum on surface contact",
     CurrentValue = false,
     Callback = function(Value)
         bunnyhopEnabled = Value
     end
 }, "BhopToggle")
 
-AimTab:CreateToggle({
-    Name = "SpinBot (Character Only)",
-    Description = "Spins character root part without affecting camera view",
+MovementTab:CreateToggle({
+    Name = t("SpinBotToggle"),
+    Description = "Rotates character orientation smoothly",
     CurrentValue = false,
     Callback = function(Value)
         spinbotEnabled = Value
     end
 }, "SpinBotToggle")
 
-AimTab:CreateSlider({
-    Name = "Spin Speed",
+MovementTab:CreateSlider({
+    Name = t("SpinSpeedSlider"),
     Range = {10, 200},
     Increment = 5,
     CurrentValue = 50,
@@ -355,238 +431,373 @@ AimTab:CreateSlider({
     end
 }, "SpinSpeedSlider")
 
-AimTab:CreateToggle({
-    Name = "TriggerBot",
-    Description = "Automatically clicks when aiming at an enemy",
+MovementTab:CreateToggle({
+    Name = t("TriggerBotToggle"),
+    Description = "Responds precisely to target visibility",
     CurrentValue = false,
     Callback = function(Value)
         triggerbotEnabled = Value
     end
 }, "TriggerBotToggle")
 
-AimTab:CreateToggle({
-    Name = "Noclip",
-    Description = "Walk through walls",
+MovementTab:CreateToggle({
+    Name = t("NoclipToggle"),
+    Description = "Traverse environmental colliders fluidly",
     CurrentValue = false,
     Callback = function(Value)
         noclipEnabled = Value
     end
 }, "NoclipToggle")
 
-local MM2Tab = Window:CreateTab({
-    Name = "MM2",
-    Icon = "security",
-    ImageSource = "Material",
-    ShowTitle = true
-})
-
-local mm2RolesEnabled = false
-local roleBillboards = {}
-
-local function getPlayerRole(player)
-    local char = player.Character
-    if not char then return "Innocent", Color3.fromRGB(0, 255, 0) end
-
-    local backpack = player:FindFirstChildOfClass("Backpack")
-    
-    local hasKnife = char:FindFirstChild("Knife") or (backpack and backpack:FindFirstChild("Knife"))
-    local hasGun = char:FindFirstChild("Gun") or (backpack and backpack:FindFirstChild("Gun")) or char:FindFirstChild("Revolver") or (backpack and backpack:FindFirstChild("Revolver"))
-
-    if hasKnife then
-        return "Murderer", Color3.fromRGB(255, 0, 0)
-    elseif hasGun then
-        return "Sheriff", Color3.fromRGB(0, 120, 255)
-    else
-        return "Innocent", Color3.fromRGB(0, 255, 0)
-    end
-end
-
-MM2Tab:CreateToggle({
-    Name = "MM2 Role ESP",
-    Description = "Shows Murderer, Sheriff, and Innocent status above heads",
-    CurrentValue = false,
-    Callback = function(Value)
-        mm2RolesEnabled = Value
-        if not mm2RolesEnabled then
-            for _, gui in pairs(roleBillboards) do
-                pcall(function() gui:Destroy() end)
-            end
-            roleBillboards = {}
+local currentAnimTrack = nil
+local function playAnimation(animId)
+    pcall(function()
+        if currentAnimTrack then
+            currentAnimTrack:Stop()
+            currentAnimTrack = nil
         end
-    end
-}, "MM2RoleToggle")
-
-MM2Tab:CreateButton({
-    Name = "Drop Silaha Işınlan (Teleport to Gun Drop)",
-    Description = "Teleports you to the dropped Sheriff gun",
-    Callback = function()
-        local droppedGun = nil
-        for _, obj in ipairs(workspace:GetDescendants()) do
-            if obj.Name == "GunDrop" or obj.Name == "DroppedGun" or (obj:IsA("BasePart") and obj.Name == "Handle" and obj.Parent and obj.Parent.Name == "GunDrop") then
-                droppedGun = obj:IsA("Model") and obj.PrimaryPart or obj
-                break
-            end
-        end
-
-        if droppedGun and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
-            lp.Character.HumanoidRootPart.CFrame = droppedGun.CFrame
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="OE HUB",Text="Silaha ışınlanıldı!",Duration=3})
-        else
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Yerde silah bulunamadı!",Duration=3})
-        end
-    end
-})
-
-MM2Tab:CreateButton({
-    Name = "Şerif: Murderer'ı Tek Atışta Vur",
-    Description = "Teleports/Aim-shoots the murderer if you are Sheriff",
-    Callback = function()
-        local role, _ = getPlayerRole(lp)
-        if role ~= "Sheriff" then
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Sen Şerif değilsin!",Duration=3})
-            return
-        end
-
-        local murdererPlr = nil
-        for _, pl in ipairs(plrs:GetPlayers()) do
-            if pl ~= lp then
-                local r, _ = getPlayerRole(pl)
-                if r == "Murderer" then
-                    murdererPlr = pl
-                    break
-                end
-            end
-        end
-
-        if murdererPlr and murdererPlr.Character and murdererPlr.Character:FindFirstChild("Head") then
-            local gun = lp.Character and lp.Character:FindFirstChild("Gun") or (lp:FindFirstChildOfClass("Backpack") and lp:FindFirstChildOfClass("Backpack"):FindFirstChild("Gun"))
-            if gun and gun.Parent == lp.Backpack then
-                gun.Parent = lp.Character
-            end
-            cam.CFrame = CFrame.new(cam.CFrame.Position, murdererPlr.Character.Head.Position)
-            task.wait(0.05)
-            pcall(function()
-                vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-                task.wait()
-                vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-            end)
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="OE HUB",Text="Murderer vuruldu!",Duration=3})
-        else
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Murderer bulunamadı!",Duration=3})
-        end
-    end
-})
-
-MM2Tab:CreateButton({
-    Name = "Murderer: Herkesi Tek Atışta Öldür",
-    Description = "Teleports behind everyone and kills them if you are Murderer",
-    Callback = function()
-        local role, _ = getPlayerRole(lp)
-        if role ~= "Murderer" then
-            game:GetService("StarterGui"):SetCore("SendNotification",{Title="Hata",Text="Sen Murderer değilsin!",Duration=3})
-            return
-        end
-
-        local knife = lp.Character and lp.Character:FindFirstChild("Knife") or (lp:FindFirstChildOfClass("Backpack") and lp:FindFirstChildOfClass("Backpack"):FindFirstChild("Knife"))
-        if knife and knife.Parent == lp.Backpack then
-            knife.Parent = lp.Character
-        end
-
-        local myHrp = lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
-        if not myHrp then return end
-
-        local originalCF = myHrp.CFrame
-        for _, pl in ipairs(plrs:GetPlayers()) do
-            if pl ~= lp and pl.Character and pl.Character:FindFirstChild("HumanoidRootPart") then
-                local hrp = pl.Character.HumanoidRootPart
-                myHrp.CFrame = hrp.CFrame * CFrame.new(0, 0, 2)
-                task.wait(0.05)
-                pcall(function()
-                    vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-                    task.wait()
-                    vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-                end)
-                task.wait(0.05)
-            end
-        end
-        myHrp.CFrame = originalCF
-        game:GetService("StarterGui"):SetCore("SendNotification",{Title="OE HUB",Text="Herkes katledildi!",Duration=3})
-    end
-})
-
-local function UpdateEsp(pl, char)
-    if not char then
-        if activeBoxes[pl] then
-            pcall(function() activeBoxes[pl].Visible = false end)
-        end
-        return
-    end
-
-    local hrp = char:FindFirstChild("HumanoidRootPart")
-    local humanoid = char:FindFirstChildOfClass("Humanoid")
-    
-    if not activeBoxes[pl] then
-        local success, box = pcall(function()
-            return Drawing.new("Square")
-        end)
-        if success and box then
-            box.Visible = false
-            box.Filled = false
-            box.Thickness = espConfig.thickness
-            box.Color = espConfig.color
-            activeBoxes[pl] = box
-        else
-            return
-        end
-    end
-    
-    local box = activeBoxes[pl]
-
-    if not hrp or not ee or not humanoid or humanoid.Health <= 0 then
-        if box then box.Visible = false end
-        return
-    end
-
-    local _, onScreen = cam:WorldToViewportPoint(hrp.Position)
-    
-    if onScreen then
-        local cf, size = char:GetBoundingBox()
-        local topPos = (cf + Vector3.new(0, size.Y / 2, 0)).Position
-        local bottomPos = (cf - Vector3.new(0, size.Y / 2, 0)).Position
+        local char = lp.Character
+        if not char then return end
+        local humanoid = char:FindFirstChildOfClass("Humanoid")
+        if not humanoid then return end
         
-        local top2D, topVisible = cam:WorldToViewportPoint(topPos)
-        local bottom2D, bottomVisible = cam:WorldToViewportPoint(bottomPos)
+        local anim = Instance.new("Animation")
+        anim.AnimationId = "rbxassetid://" .. tostring(animId)
+        currentAnimTrack = humanoid:LoadAnimation(anim)
+        currentAnimTrack:Play()
+    end)
+end
 
-        if topVisible and bottomVisible then
-            local height = math.abs(bottom2D.Y - top2D.Y)
-            local width = height * 0.5
-            
-            box.Size = Vector2.new(width, height)
-            box.Position = Vector2.new(top2D.X - width / 2, top2D.Y)
-            box.Visible = true
-        else
-            box.Visible = false
+AnimationTab:CreateButton({
+    Name = "Kutlama Dansı (Dance)",
+    Description = "Eğlenceli dans animasyonu",
+    Callback = function()
+        playAnimation(507710273)
+    end
+})
+
+AnimationTab:CreateButton({
+    Name = "Selamlama (Wave)",
+    Description = "El sallama animasyonu",
+    Callback = function()
+        playAnimation(507770677)
+    end
+})
+
+AnimationTab:CreateButton({
+    Name = "Kahkaha (Laugh)",
+    Description = "Gülme animasyonu",
+    Callback = function()
+        playAnimation(507771019)
+    end
+})
+
+AnimationTab:CreateButton({
+    Name = "Animasyonları Durdur",
+    Description = "Aktif olan animasyonu iptal eder",
+    Callback = function()
+        if currentAnimTrack then
+            currentAnimTrack:Stop()
+            currentAnimTrack = nil
         end
-    else
-        box.Visible = false
+    end
+})
+
+local function getEquippedItem(char, player)
+    if not char then return "None" end
+    
+    for _, item in ipairs(char:GetChildren()) do
+        if item:IsA("Tool") then
+            return item.Name
+        end
+    end
+    
+    local backpack = player:FindFirstChildOfClass("Backpack")
+    if backpack then
+        for _, item in ipairs(backpack:GetChildren()) do
+            if item:IsA("Tool") then
+                return item.Name .. " (Backpack)"
+            end
+        end
+    end
+    
+    return "Fists/None"
+end
+
+local function cleanESPData(pl)
+    if activeSkeletons[pl] then
+        pcall(function()
+            for _, line in pairs(activeSkeletons[pl].lines) do line:Remove() end
+            if activeSkeletons[pl].nameText then activeSkeletons[pl].nameText:Remove() end
+            if activeSkeletons[pl].healthText then activeSkeletons[pl].healthText:Remove() end
+            if activeSkeletons[pl].itemText then activeSkeletons[pl].itemText:Remove() end
+        end)
+        activeSkeletons[pl] = nil
+    end
+    if active3dBoxes[pl] then
+        pcall(function() active3dBoxes[pl]:Destroy() end)
+        active3dBoxes[pl] = nil
     end
 end
+
+local function UpdateSkeletonEsp(pl, char)
+    if not skeletonEspEnabled or not char then
+        cleanESPData(pl)
+        return
+    end
+
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    local rootPart = char:FindFirstChild("HumanoidRootPart")
+    if not humanoid or humanoid.Health <= 0 or not rootPart then
+        cleanESPData(pl)
+        return
+    end
+
+    local head = char:FindFirstChild("Head")
+    local upperTorso = char:FindFirstChild("UpperTorso") or char:FindFirstChild("Torso")
+    local lowerTorso = char:FindFirstChild("LowerTorso") or upperTorso
+    local leftUpperArm = char:FindFirstChild("LeftUpperArm") or char:FindFirstChild("Left Arm")
+    local leftLowerArm = char:FindFirstChild("LeftLowerArm") or char:FindFirstChild("Left Arm")
+    local rightUpperArm = char:FindFirstChild("RightUpperArm") or char:FindFirstChild("Right Arm")
+    local rightLowerArm = char:FindFirstChild("RightLowerArm") or char:FindFirstChild("Right Arm")
+    local leftUpperLeg = char:FindFirstChild("LeftUpperLeg") or char:FindFirstChild("Left Leg")
+    local leftLowerLeg = char:FindFirstChild("LeftLowerLeg") or char:FindFirstChild("Left Leg")
+    local rightUpperLeg = char:FindFirstChild("RightUpperLeg") or char:FindFirstChild("Right Leg")
+    local rightLowerLeg = char:FindFirstChild("RightLowerLeg") or char:FindFirstChild("Right Leg")
+
+    if not head or not upperTorso then return end
+
+    if not activeSkeletons[pl] then
+        local lines = {}
+        for i = 1, 10 do
+            local l = Drawing.new("Line")
+            l.Thickness = 1
+            l.Color = isTeammate(pl) and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(0, 255, 120)
+            l.Visible = false
+            table.insert(lines, l)
+        end
+        
+        local nameTxt = Drawing.new("Text")
+        nameTxt.Size = 12
+        nameTxt.Center = true
+        nameTxt.Outline = true
+        nameTxt.Color = Color3.fromRGB(255, 255, 255)
+        nameTxt.Visible = false
+
+        local healthTxt = Drawing.new("Text")
+        healthTxt.Size = 12
+        healthTxt.Center = true
+        healthTxt.Outline = true
+        healthTxt.Color = Color3.fromRGB(0, 255, 0)
+        healthTxt.Visible = false
+
+        local itemTxt = Drawing.new("Text")
+        itemTxt.Size = 12
+        itemTxt.Center = true
+        itemTxt.Outline = true
+        itemTxt.Color = Color3.fromRGB(255, 200, 0)
+        itemTxt.Visible = false
+
+        activeSkeletons[pl] = {lines = lines, nameText = nameTxt, healthText = healthTxt, itemText = itemTxt}
+    end
+
+    local data = activeSkeletons[pl]
+    local lines = data.lines
+    local nameTxt = data.nameText
+    local healthTxt = data.healthText
+    local itemTxt = data.itemText
+
+    local lineColor = isTeammate(pl) and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(0, 255, 120)
+    for _, line in pairs(lines) do
+        line.Color = lineColor
+    end
+
+    local bonePairs = {
+        {head, upperTorso},
+        {upperTorso, lowerTorso},
+        {upperTorso, leftUpperArm},
+        {leftUpperArm, leftLowerArm},
+        {upperTorso, rightUpperArm},
+        {rightUpperArm, rightLowerArm},
+        {lowerTorso, leftUpperLeg},
+        {leftUpperLeg, leftLowerLeg},
+        {lowerTorso, rightUpperLeg},
+        {rightUpperLeg, rightLowerLeg}
+    }
+
+    for i, pair in ipairs(bonePairs) do
+        local p1, p2 = pair[1], pair[2]
+        if p1 and p2 and lines[i] then
+            local pos1, vis1 = cam:WorldToViewportPoint(p1.Position)
+            local pos2, vis2 = cam:WorldToViewportPoint(p2.Position)
+            if vis1 and vis2 then
+                lines[i].From = Vector2.new(pos1.X, pos1.Y)
+                lines[i].To = Vector2.new(pos2.X, pos2.Y)
+                lines[i].Visible = true
+            else
+                lines[i].Visible = false
+            end
+        elseif lines[i] then
+            lines[i].Visible = false
+        end
+    end
+
+    local headPos, headVis = cam:WorldToViewportPoint(head.Position + Vector3.new(0, 0.6, 0))
+    if headVis and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
+        local distance = math.floor((lp.Character.HumanoidRootPart.Position - rootPart.Position).Magnitude)
+        local itemHolding = getEquippedItem(char, pl)
+        local statusText = isTeammate(pl) and "[TEAM]" or "[ENEMY]"
+        if isFriend(pl) then
+            statusText = statusText .. " [FRIEND]"
+        end
+        
+        nameTxt.Text = string.format("%s %s [%dm]", pl.Name, statusText, distance)
+        nameTxt.Position = Vector2.new(headPos.X, headPos.Y - 45)
+        nameTxt.Visible = true
+
+        healthTxt.Text = string.format("HP: %d", math.floor(humanoid.Health))
+        healthTxt.Position = Vector2.new(headPos.X, headPos.Y - 30)
+        healthTxt.Visible = true
+
+        itemTxt.Text = string.format("Item: %s", itemHolding)
+        itemTxt.Position = Vector2.new(headPos.X, headPos.Y - 15)
+        itemTxt.Visible = true
+    else
+        nameTxt.Visible = false
+        healthTxt.Visible = false
+        itemTxt.Visible = false
+    end
+end
+
+local function Update3DBoxEsp(pl, char)
+    if not box3dEspEnabled or not char then
+        if active3dBoxes[pl] then
+            pcall(function() active3dBoxes[pl]:Destroy() end)
+            active3dBoxes[pl] = nil
+        end
+        return
+    end
+
+    local humanoid = char:FindFirstChildOfClass("Humanoid")
+    if not humanoid or humanoid.Health <= 0 then
+        if active3dBoxes[pl] then
+            pcall(function() active3dBoxes[pl]:Destroy() end)
+            active3dBoxes[pl] = nil
+        end
+        return
+    end
+
+    local rootPart = char:FindFirstChild("HumanoidRootPart")
+    if not rootPart then return end
+
+    local boxAdornment = active3dBoxes[pl]
+    if not boxAdornment then
+        boxAdornment = Instance.new("BoxHandleAdornment")
+        boxAdornment.Name = "3DBoxESP"
+        boxAdornment.Adornee = rootPart
+        boxAdornment.AlwaysOnTop = true
+        boxAdornment.ZIndex = 5
+        boxAdornment.Transparency = 0.6
+        boxAdornment.Size = Vector3.new(4, 5, 2)
+        boxAdornment.Parent = rootPart
+        active3dBoxes[pl] = boxAdornment
+    end
+    
+    boxAdornment.Color3 = isTeammate(pl) and Color3.fromRGB(0, 150, 255) or Color3.fromRGB(0, 255, 120)
+end
+
+local trackedPlayerHealth = {}
+
+local function setupPlayerHealthListener(pl)
+    if pl == lp then return end
+    local function connectCharacter(char)
+        local humanoid = char:WaitForChild("Humanoid", 5)
+        if humanoid then
+            trackedPlayerHealth[pl] = humanoid.Health
+            humanoid.HealthChanged:Connect(function(newHealth)
+                if newHealth <= 0 then
+                    cleanESPData(pl)
+                    trackedPlayerHealth[pl] = -999 
+                else
+                    trackedPlayerHealth[pl] = newHealth
+                end
+            end)
+        end
+    end
+    
+    pl.CharacterAdded:Connect(function(char)
+        trackedPlayerHealth[pl] = nil
+        cleanESPData(pl)
+        connectCharacter(char)
+    end)
+    if pl.Character then
+        connectCharacter(pl.Character)
+    end
+end
+
+for _, pl in ipairs(Plrs:GetPlayers()) do
+    setupPlayerHealthListener(pl)
+end
+Plrs.PlayerAdded:Connect(function(pl)
+    setupPlayerHealthListener(pl)
+end)
 
 rs.RenderStepped:Connect(function(dt)
-    if ae then
-        fov.Position = UDim2.new(0.5, -fs/2, 0.5, -fs/2)
-        local t, md = nil, math.huge
-        for _, pl in ipairs(plrs:GetPlayers()) do
-            if pl ~= lp and pl.Character and pl.Character:FindFirstChild("Head") then
-                local h = pl.Character.Head
-                local pos, vis = cam:WorldToViewportPoint(h.Position)
-                if vis then
-                    local d = (Vector2.new(pos.X,pos.Y) - Vector2.new(cam.ViewportSize.X/2, cam.ViewportSize.Y/2)).Magnitude
-                    if d < fs/2 and d < md then md = d; t = h end
+    if sniperFixEnabled then
+        pcall(function()
+            local gui = lp:FindFirstChild("PlayerGui")
+            if gui then
+                for _, ui in ipairs(gui:GetChildren()) do
+                    if ui.Name == "ScopeGui" or ui.Name == "Scope" or ui.Name == "SniperScope" then
+                        for _, desc in ipairs(ui:GetDescendants()) do
+                            if desc:IsA("Frame") or desc:IsA("ImageLabel") then
+                                if desc.Name == "Scope" or desc.Name == "Frame" or desc.Name == "Overlay" or desc.BackgroundTransparency < 1 or desc:IsA("ImageLabel") then
+                                    desc.Visible = false
+                                end
+                            end
+                        end
+                    end
                 end
             end
+        end)
+    end
+
+    crosshairDot.Visible = customCrosshairEnabled
+    crossHLine.Visible = customCrosshairEnabled
+    crossVLine.Visible = customCrosshairEnabled
+
+    if ae then
+        local canLock = true
+        if aimOnFireOnly then
+            canLock = isFiring
         end
-        if t then cam.CFrame = CFrame.new(cam.CFrame.Position, t.Position) end
+
+        if canLock then
+            local targetPartObj, shortestDistance = nil, math.huge
+            local centerScreen = Vector2.new(cam.ViewportSize.X / 2, cam.ViewportSize.Y / 2)
+
+            for _, pl in ipairs(Plrs:GetPlayers()) do
+                if not isTeammate(pl) and trackedPlayerHealth[pl] ~= -999 and pl.Character then
+                    local targetNode = pl.Character:FindFirstChild("Head")
+                    local humanoid = pl.Character:FindFirstChildOfClass("Humanoid")
+                    if targetNode and humanoid and humanoid.Health > 0 then
+                        local screenPos, onScreen = cam:WorldToViewportPoint(targetNode.Position)
+                        if onScreen then
+                            local screenVector = Vector2.new(screenPos.X, screenPos.Y)
+                            local distanceFromCenter = (screenVector - centerScreen).Magnitude
+                            if distanceFromCenter <= (fs / 2) and distanceFromCenter < shortestDistance then
+                                shortestDistance = distanceFromCenter
+                                targetPartObj = targetNode
+                            end
+                        end
+                    end
+                end
+            end
+
+            if targetPartObj then
+                cam.CFrame = CFrame.new(cam.CFrame.Position, targetPartObj.Position)
+            end
+        end
     end
 
     if bunnyhopEnabled then
@@ -615,13 +826,16 @@ rs.RenderStepped:Connect(function(dt)
         local mouse = lp:GetMouse()
         local target = mouse.Target
         if target and target.Parent then
-            local enemyPlr = plrs:GetPlayerFromCharacter(target.Parent)
-            if enemyPlr and enemyPlr ~= lp then
-                pcall(function()
-                    vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
-                    task.wait()
-                    vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
-                end)
+            local enemyPlr = Plrs:GetPlayerFromCharacter(target.Parent)
+            if enemyPlr and not isTeammate(enemyPlr) and trackedPlayerHealth[enemyPlr] ~= -999 then
+                local head = enemyPlr.Character and enemyPlr.Character:FindFirstChild("Head")
+                if head and isVisible(head) then
+                    pcall(function()
+                        vim:SendMouseButtonEvent(0, 0, 0, true, game, 0)
+                        task.wait()
+                        vim:SendMouseButtonEvent(0, 0, 0, false, game, 0)
+                    end)
+                end
             end
         end
     end
@@ -637,57 +851,21 @@ rs.RenderStepped:Connect(function(dt)
         end
     end
     
-    if ee then
-        for _, pl in ipairs(plrs:GetPlayers()) do
+    if skeletonEspEnabled or box3dEspEnabled then
+        for _, pl in ipairs(Plrs:GetPlayers()) do
             if pl ~= lp then
-                UpdateEsp(pl, pl.Character)
-            end
-        end
-    end
-
-    if mm2RolesEnabled then
-        for _, pl in ipairs(plrs:GetPlayers()) do
-            if pl ~= lp and pl.Character and pl.Character:FindFirstChild("Head") then
-                local head = pl.Character.Head
-                local role, color = getPlayerRole(pl)
-                
-                local billboard = roleBillboards[pl]
-                if not billboard then
-                    billboard = Instance.new("BillboardGui")
-                    billboard.Name = "MM2RoleESP"
-                    billboard.Size = UDim2.new(0, 100, 0, 40)
-                    billboard.StudsOffset = Vector3.new(0, 2.5, 0)
-                    billboard.AlwaysOnTop = true
-                    
-                    local textLabel = Instance.new("TextLabel")
-                    textLabel.Name = "RoleText"
-                    textLabel.Size = UDim2.new(1, 0, 1, 0)
-                    textLabel.BackgroundTransparency = 1
-                    textLabel.TextScaled = true
-                    textLabel.Font = Enum.Font.SourceSansBold
-                    textLabel.TextStrokeTransparency = 0
-                    textLabel.Parent = billboard
-                    
-                    billboard.Parent = head
-                    roleBillboards[pl] = billboard
-                end
-                
-                local txt = billboard:FindFirstChild("RoleText")
-                if txt then
-                    txt.Text = pl.Name .. "\n[" .. role .. "]"
-                    txt.TextColor3 = color
-                end
-            else
-                if roleBillboards[pl] then
-                    roleBillboards[pl]:Destroy()
-                    roleBillboards[pl] = nil
+                if trackedPlayerHealth[pl] == -999 then
+                    cleanESPData(pl)
+                else
+                    UpdateSkeletonEsp(pl, pl.Character)
+                    Update3DBoxEsp(pl, pl.Character)
                 end
             end
         end
     end
 end)
 
-rs.Heartbeat:Connect(function(dt)
+rs.Heartbeat:Connect(function()
     if not speedHackEnabled then return end
     local character = lp.Character
     if not character then return end
@@ -709,26 +887,12 @@ rs.Heartbeat:Connect(function(dt)
     end
 end)
 
-plrs.PlayerRemoving:Connect(function(pl)
-    if activeBoxes[pl] then
-        pcall(function() activeBoxes[pl]:Remove() end)
-        activeBoxes[pl] = nil
-    end
-    if roleBillboards[pl] then
-        pcall(function() roleBillboards[pl]:Destroy() end)
-        roleBillboards[pl] = nil
-    end
+Plrs.PlayerRemoving:Connect(function(pl)
+    cleanESPData(pl)
+    trackedPlayerHealth[pl] = nil
 end)
 
-local ChatTab = Window:CreateTab({
-    Name = "Chat Log",
-    Icon = "forum",
-    ImageSource = "Material",
-    ShowTitle = true
-})
-
 local chatLabels = {}
-
 local function addChatMsg(text, sender)
     if not text or text == "" then return end
     local lbl = ChatTab:CreateLabel({
@@ -746,7 +910,6 @@ ChatTab:CreateButton({
             pcall(function() lbl:Destroy() end)
         end
         chatLabels = {}
-        game:GetService("StarterGui"):SetCore("SendNotification",{Title="OE HUB",Text="Chat temizlendi",Duration=3})
     end
 })
 
