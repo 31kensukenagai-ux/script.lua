@@ -161,9 +161,7 @@ local function isValid(t)
     return h and h.Health > 0 and t.Character:FindFirstChild(S.AimbotPart) ~= nil
 end
 
--- ==========================================
--- TEAM & ESP LOGIC FUNCTIONS
--- ==========================================
+
 local function UpdateMyTeam()
     if not LocalPlayer.Character then return end
     local charName = LocalPlayer.Character.Name
