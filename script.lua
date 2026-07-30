@@ -15,6 +15,11 @@ pcall(function()
     if CoreGui:FindFirstChild("BloxStrikeFOV") then CoreGui.BloxStrikeFOV:Destroy() end
 end)
 
+if gethui and not cloneref then
+    pcall(function()
+        local coreGui = game:GetService("CoreGui")
+    end)
+end
 
 local success, Luna = pcall(function()
     return loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
