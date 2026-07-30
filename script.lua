@@ -7,7 +7,7 @@ local RunService = game:GetService("RunService")
 local LocalPlayer = Players.LocalPlayer
 local Workspace = game:GetService("Workspace")
 
--- Clean up any existing UI instances
+
 pcall(function()
     if CoreGui:FindFirstChild("BloxStrikeKeySystem") then CoreGui.BloxStrikeKeySystem:Destroy() end
     if CoreGui:FindFirstChild("BloxStrikeHub") then CoreGui.BloxStrikeHub:Destroy() end
