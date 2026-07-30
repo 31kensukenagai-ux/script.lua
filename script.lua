@@ -1,1 +1,724 @@
-local _a=game:GetService(string.char(67,111,114,101,71,117,105))local _b=game:GetService(string.char(80,108,97,121,101,114,115))local _c=game:GetService(string.char(85,115,101,114,73,110,112,117,116,83,101,114,118,105,99,101))local _d=game:GetService(string.char(82,117,110,83,101,114,118,105,99,101))local _e=_b._e local _f=game:GetService(string.char(87,111,114,107,115,112,97,99,101))pcall(function()if _a:FindFirstChild(string.char(66,108,111,120,83,116,114,105,107,101,75,101,121,83,121,115,116,101,109))then _a.BloxStrikeKeySystem:Destroy()end if _a:FindFirstChild(string.char(66,108,111,120,83,116,114,105,107,101,72,117,98))then _a.BloxStrikeHub:Destroy()end if _a:FindFirstChild(string.char(76,117,110,97))then _a._h:Destroy()end if _a:FindFirstChild(string.char(66,108,111,120,83,116,114,105,107,101,70,79,86))then _a.BloxStrikeFOV:Destroy()end end)local _g,_h=pcall(function()return loadstring(game:HttpGet(string.char(104,116,116,112,115,58,47,47,114,97,119,46,103,105,116,104,117,98,117,115,101,114,99,111,110,116,101,110,116,46,99,111,109,47,78,101,98,117,108,97,45,83,111,102,116,119,111,114,107,115,47,76,117,110,97,45,73,110,116,101,114,102,97,99,101,45,83,117,105,116,101,47,114,101,102,115,47,104,101,97,100,115,47,109,97,105,110,47,115,111,117,114,99,101,46,108,117,97),true))()end)if not _g or not _h then warn(string.char(70,97,105,108,101,100,32,116,111,32,108,111,97,100,32,76,117,110,97,32,85,73,32,76,105,98,114,97,114,121,46))return end local _i=_h:CreateWindow({Name=string.char(66,108,111,120,83,116,114,105,107,101,32,85,108,116,105,109,97,116,101,32,80,114,111,32,118,51,46,53),Subtitle=string.char(65,117,116,104,111,114,105,122,101,100,32,72,117,98),LogoID=nil,LoadingEnabled=true,LoadingTitle=string.char(66,108,111,120,83,116,114,105,107,101,32,83,117,105,116,101,32,118,51,46,53),LoadingSubtitle=string.char(76,111,97,100,105,110,103,32,65,117,116,104,111,114,105,122,101,100,32,77,101,110,117,46,46,46),ConfigSettings={RootFolder=nil,ConfigFolder=string.char(66,108,111,120,83,116,114,105,107,101,80,114,111,86,51,53)},KeySystem=false,KeySettings={}})_i:CreateHomeTab({SupportedExecutors={},DiscordInvite="",Icon=2,})local _j=_i:CreateTab({Name=string.char(67,111,109,98,97,116),Icon=string.char(103,112,115,95,102,105,120,101,100),ImageSource=string.char(77,97,116,101,114,105,97,108),ShowTitle=true})local _k=_i:CreateTab({Name=string.char(86,105,115,117,97,108,115),Icon=string.char(118,105,115,105,98,105,108,105,116,121),ImageSource=string.char(77,97,116,101,114,105,97,108),ShowTitle=true})local _l=_i:CreateTab({Name=string.char(77,111,118,101,109,101,110,116),Icon=string.char(102,108,105,103,104,116),ImageSource=string.char(77,97,116,101,114,105,97,108),ShowTitle=true})local _m=_i:CreateTab({Name=string.char(77,97,105,110,32,77,101,110,117),Icon=string.char(104,111,109,101),ImageSource=string.char(77,97,116,101,114,105,97,108),ShowTitle=true})local _n=_i:CreateTab({Name=string.char(83,101,116,116,105,110,103,115),Icon=string.char(115,101,116,116,105,110,103,115),ImageSource=string.char(77,97,116,101,114,105,97,108),ShowTitle=true})local _o=Instance.new(string.char(83,99,114,101,101,110,71,117,105))_o.Name=string.char(66,108,111,120,83,116,114,105,107,101,82,101,100,70,108,97,115,104)_o.ResetOnSpawn=false _o.Parent=_a local _p=Instance.new(string.char(70,114,97,109,101))_p.Size=UDim2.new(1,0,1,0)_p.BackgroundColor3=Color3.fromRGB(255,0,0)_p.BackgroundTransparency=1 _p.BorderSizePixel=0 _p.ZIndex=9999 _p.Parent=_o local function _q()task.spawn(function()_p.BackgroundTransparency=0.75 for _r=0.75,1,0.05 do _p.BackgroundTransparency=_r task.wait(0.02)end _p.BackgroundTransparency=1 end)end local _s={Aimbot=false,AimbotPart=string.char(72,101,97,100),AimKey=Enum.UserInputType.MouseButton2,Triggerbot=false,TriggerKey=Enum.UserInputType.MouseButton1,TriggerAlwaysOn=false,TriggerDelay=0,ShowFov=false,FovRadius=100,Smoothness=0,AimOffset=0,BoxESP=false,SkeletonESP=false,AccurateHead=false,NormalHead=false,BoxCol=Color3.fromRGB(255,255,255),SkelCol=Color3.fromRGB(255,255,255),AccCol=Color3.fromRGB(255,0,0),NormCol=Color3.fromRGB(0,255,0),HeadSize=1,PlayerChamsEnabled=false,WeaponChamsEnabled=false,HealthBasedChams=false,PlayerFillColor=Color3.fromRGB(255,0,0),PlayerOutlineColor=Color3.fromRGB(255,255,255),PlayerFillTransparency=0.5,WeaponFillColor=Color3.fromRGB(0,255,255),WeaponOutlineColor=Color3.fromRGB(255,255,255),WeaponFillTransparency=0.5,TeamCheck=true}local _t={}local _u,_v,_w=false,false,nil local _x=0 local _y,_z=0,0 local _A,_B={},{}local _C={}local _D={}local _E={}local _F={}local _H=false local _I=true local _J=nil local _K=_f:FindFirstChild(string.char(67,104,97,114,97,99,116,101,114,115))or _f local _L=_e:GetMouse()local _M=Instance.new(string.char(83,99,114,101,101,110,71,117,105))_M.Name=string.char(66,108,111,120,83,116,114,105,107,101,70,79,86)_M.ResetOnSpawn=false _M.Parent=_a local _N=Instance.new(string.char(70,114,97,109,101))_N.Size=UDim2.new(0,200,0,200)_N.AnchorPoint=Vector2.new(0.5,0.5)_N.Position=UDim2.new(0.5,0,0.5,0)_N.BackgroundTransparency=1 _N.Visible=false _N.Parent=_M local _O=Instance.new(string.char(85,73,67,111,114,110,101,114))_O.CornerRadius=UDim.new(1,0)_O.Parent=_N local _P=Instance.new(string.char(85,73,83,116,114,111,107,101))_P.Color=Color3.fromRGB(255,0,0)_P.Thickness=1.5 _P.Parent=_N local function _Q(_R)if not _R or not _R.Character then return false end if _R==_e then return false end if _e:IsFriendsWith(_R.UserId)then return false end local _S=_R.Character:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))return _S and _S.Health>0 and _R.Character:FindFirstChild(_s.AimbotPart)~=nil end local function _T()if not _e.Character then return end local _U=_e.Character.Name for _V,_W in ipairs(_K:GetChildren())do if _W:IsA(string.char(70,111,108,100,101,114))and _W:FindFirstChild(_U)then if _J~=_W.Name then _J=_W.Name end return _J end end end task.spawn(function()task.wait(1)while true do _T()task.wait(3)end end)_e.CharacterAdded:Connect(function()task.wait(0.8)_T()end)local function _X(_Y)if not _s.TeamCheck or not _J then return false end if not _Y.Character then return false end local _U=_Y.Character.Name for _V,_W in ipairs(_K:GetChildren())do if _W:IsA(string.char(70,111,108,100,101,114))and _W:FindFirstChild(_U)then return _W.Name==_J end end return false end local function _Z(_Y)if _Y==_e then return false end if not _I then return true end return not _X(_Y)end local function _aa(_ba,_ca,_da)local _S=Instance.new(string.char(72,105,103,104,108,105,103,104,116))_S.FillColor=_ba _S.OutlineColor=_ca _S.FillTransparency=_da _S.OutlineTransparency=0 _S.DepthMode=Enum.HighlightDepthMode.AlwaysOnTop _S.Enabled=true _S.Parent=_a return _S end local function _ea(_fa,_ga)local _ha=math.clamp(_fa/_ga,0,1)return Color3.fromRGB((1-_ha)*255,_ha*255,50)end local function _ia()for _ja,_ka in pairs(_F)do if _ka then if _ka._na then _ka._na:Remove()end if _ka._oa then _ka._oa:Remove()end if _ka._pa then _ka._pa:Remove()end if _ka._qa then _ka._qa:Remove()end if _ka._ra then _ka._ra:Remove()end if _ka._sa then _ka._sa:Remove()end end end _F={}end local function _la(_ja)if _F[_ja]then local _ka=_F[_ja]if _ka._na then _ka._na:Remove()end if _ka._oa then _ka._oa:Remove()end if _ka._pa then _ka._pa:Remove()end if _ka._qa then _ka._qa:Remove()end if _ka._ra then _ka._ra:Remove()end if _ka._sa then _ka._sa:Remove()end _F[_ja]=nil end if _D[_ja]then _D[_ja]:Destroy()_D[_ja]=nil end if _E[_ja]then _E[_ja]:Destroy()_E[_ja]=nil end end local function _ma(_ja)if _ja==_e then return end if _F[_ja]then return end local _na=Drawing.new(string.char(83,113,117,97,114,101))_na.Visible=false _na.Color=Color3.new(0,0,0)_na.Thickness=3 _na.Filled=false local _oa=Drawing.new(string.char(83,113,117,97,114,101))_oa.Visible=false _oa.Color=Color3.new(1,1,1)_oa.Thickness=1 _oa.Filled=false local _pa=Drawing.new(string.char(84,101,120,116))_pa.Visible=false _pa.Color=Color3.new(1,1,1)_pa.Size=13 _pa.Center=true _pa.Outline=true local _qa=Drawing.new(string.char(84,101,120,116))_qa.Visible=false _qa.Color=Color3.new(0.8,0.8,0.8)_qa.Size=12 _qa.Center=true _qa.Outline=true local _ra=Drawing.new(string.char(83,113,117,97,114,101))_ra.Visible=false _ra.Color=Color3.new(0,0,0)_ra.Thickness=1 _ra.Filled=true local _sa=Drawing.new(string.char(83,113,117,97,114,101))_sa.Visible=false _sa.Thickness=1 _sa.Filled=true _F[_ja]={_na=_na,_oa=_oa,_pa=_pa,_qa=_qa,_ra=_ra,_sa=_sa}end table.insert(_t,_c.InputBegan:Connect(function(_r,_ta)local _ua=_r.UserInputType==Enum.UserInputType.Keyboard and _r.KeyCode or _r.UserInputType if _ua==_s.AimKey and(not _ta or _ua~=_r.KeyCode)then _u=true _q()end if _ua==_s.TriggerKey and(not _ta or _ua~=_r.KeyCode)then _v=true end if not _ta and _r.KeyCode==Enum.KeyCode.K then _H=not _H if not _H then _ia()end end end))table.insert(_t,_c.InputEnded:Connect(function(_r)local _ua=_r.UserInputType==Enum.UserInputType.Keyboard and _r.KeyCode or _r.UserInputType if _ua==_s.AimKey then _u=false;_w=nil end if _ua==_s.TriggerKey then _v=false end end))pcall(function()_d:BindToRenderStep(string.char(68,88,65,105,109,98,111,116,76,111,99,107),205,function(_va)local _wa=_f.CurrentCamera;if not _wa then return end pcall(function()_N.Position=UDim2.new(0.5,0,0.5,0)_N.Size=UDim2.new(0,_s.FovRadius*2,0,_s.FovRadius*2)_N.Visible=_s.ShowFov _P.Color=Color3.fromRGB(255,0,0)end)pcall(function()if _s.HeadSize and _s.HeadSize>1 then for _V,_ha in pairs(_b:GetPlayers())do if _ha~=_e and _Z(_ha)and _ha.Character then local _xa=_ha.Character:FindFirstChild(string.char(72,101,97,100))local _ya=_ha.Character:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))if _xa and _ya and _ya.Health>0 then _xa.Size=Vector3.new(_s.HeadSize,_s.HeadSize,_s.HeadSize)_xa.CanCollide=false _xa.Transparency=0.5 end end end end end)for _V,_Y in ipairs(_b:GetPlayers())do if _Y~=_e then if _X(_Y)then if _D[_Y]then _D[_Y]:Destroy()_D[_Y]=nil end if _E[_Y]then _E[_Y]:Destroy()_E[_Y]=nil end else local _za=_Y.Character if _za then local _ya=_za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))if _ya and _ya.Health>0 then if _s.PlayerChamsEnabled then if not _D[_Y]then _D[_Y]=_aa(_s.PlayerFillColor,_s.PlayerOutlineColor,_s.PlayerFillTransparency)end if _s.HealthBasedChams then _D[_Y].FillColor=_ea(_ya.Health,_ya.MaxHealth)else _D[_Y].FillColor=_s.PlayerFillColor end _D[_Y].Adornee=_za else if _D[_Y]then _D[_Y]:Destroy()_D[_Y]=nil end end if _s.WeaponChamsEnabled then local _Aa=_f:FindFirstChild(string.char(68,101,98,114,105,115))local _Ba=_Aa and _Aa:FindFirstChild(_Y.Name..string.char(95,87,101,97,112,111,110))if _Ba then if not _E[_Y]then _E[_Y]=_aa(_s.WeaponFillColor,_s.WeaponOutlineColor,_s.WeaponFillTransparency)end _E[_Y].Adornee=_Ba end else if _E[_Y]then _E[_Y]:Destroy()_E[_Y]=nil end end else if _D[_Y]then _D[_Y]:Destroy()_D[_Y]=nil end if _E[_Y]then _E[_Y]:Destroy()_E[_Y]=nil end end else if _D[_Y]then _D[_Y]:Destroy()_D[_Y]=nil end if _E[_Y]then _E[_Y]:Destroy()_E[_Y]=nil end end end end end if _H then for _V,_ja in ipairs(_b:GetPlayers())do if _ja~=_e then if _Z(_ja)then local _za=_ja.Character local _Ca=_za and _za:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116))local _xa=_za and _za:FindFirstChild(string.char(72,101,97,100))local _Da=_za and _za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))if _Ca and _xa and _Da and _Da.Health>0 then if not _F[_ja]then _ma(_ja)end local _ka=_F[_ja]if _ka then local _Ea,_Fa=_wa:WorldToViewportPoint(_Ca.Position)local _Ga,_Ha=_wa:WorldToViewportPoint(_xa.Position+Vector3.new(0,0.5,0))if not _Fa and not _Ha then _ka._na.Visible=false _ka._oa.Visible=false _ka._pa.Visible=false _ka._qa.Visible=false _ka._ra.Visible=false _ka._sa.Visible=false else local _Ia=math.abs(_Ga.Y-_Ea.Y)local _Ja=_Ia/2 local _Ka=_Ea.X-_Ja/2 local _La=_Ea.Y _ka._na.Visible=true _ka._na.Position=Vector2.new(_Ka,_La)_ka._na.Size=Vector2.new(_Ja,_Ia)_ka._oa.Visible=true _ka._oa.Position=Vector2.new(_Ka,_La)_ka._oa.Size=Vector2.new(_Ja,_Ia)_ka._pa.Visible=true _ka._pa.Text=_ja.Name _ka._pa.Position=Vector2.new(_Ea.X,_La-14)local _Ma=(_e.Character and _e.Character:FindFirstChild(string.char(72,117,109,97,110,111,105,100,82,111,111,116,80,97,114,116)))and(_e.Character.HumanoidRootPart.Position-_Ca.Position).Magnitude or 0 _ka._qa.Visible=true _ka._qa.Text=string.format(string.char(37,46,48,102,32,109),_Ma)_ka._qa.Position=Vector2.new(_Ea.X,_La+_Ia+2)local _Na=math.clamp(_Da.Health/_Da.MaxHealth,0,1)local _Oa=2 local _Pa=_Ia local _Qa=_Ka-_Oa-2 local _Ra=_La _ka._ra.Visible=true _ka._ra.Position=Vector2.new(_Qa,_Ra)_ka._ra.Size=Vector2.new(_Oa,_Pa)_ka._sa.Visible=true _ka._sa.Position=Vector2.new(_Qa,_Ra+_Pa*(1-_Na))_ka._sa.Size=Vector2.new(_Oa,_Pa*_Pa*(_Na/_Pa))_ka._sa.Size=Vector2.new(_Oa,_Pa*_Na)_ka._sa.Color=Color3.new(1-_Na,_Na,0)end end else _la(_ja)end else _la(_ja)end end end end if _s.Triggerbot and(_s.TriggerAlwaysOn or _v)and tick()-_x>(_s.TriggerDelay/1000)then local _Sa=_L.Target if _Sa then local _za=_Sa.Parent if _za and not _za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))then _za=_za.Parent end if _za and _za:IsA(string.char(77,111,100,101,108))and _za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))then local _ha=_b:GetPlayerFromCharacter(_za)if _ha and _ha~=_e and _Q(_ha)then if mouse1click then mouse1click();_x=tick()end end end end end if _s.Aimbot and _u then if not _Q(_w)then local _Ta,_Ua=_s.FovRadius,_wa.ViewportSize/2 for _V,_ha in pairs(_b:GetPlayers())do if _ha~=_e and _Q(_ha)then local _Va,_Wa=_wa:WorldToViewportPoint(_ha.Character[_s.AimbotPart].Position)if _Wa then local _Ma=(Vector2.new(_Va.X,_Va.Y)-_Ua).Magnitude;if _Ma<=_Ta then _w,_Ta=_ha,_Ma end end end end end if _w then local _Xa=_w.Character[_s.AimbotPart].Position+Vector3.new(0,_s.AimOffset,0)local _Ya,_Za=_wa:WorldToViewportPoint(_Xa)if _Za then if mousemoverel then local _ab=(1.1-_s.Smoothness)*20*_va local _bb=(_Ya.X-_wa.ViewportSize.X/2)*_ab+_y;local _cb=(_Ya.Y-_wa.ViewportSize.Y/2)*_ab+_z local _db,_eb=math.floor(_bb),math.floor(_cb);_y,_z=_bb-_db,_cb-_eb if _db~=0 or _eb~=0 then mousemoverel(_db,_eb)end else _wa.CFrame=_wa.CFrame:Lerp(CFrame.lookAt(_wa.CFrame.Position,_Xa),(1.1-_s.Smoothness)*10*_va)end end end else _y,_z=0,0 end end)end)_e.Chatted:Connect(function(_fb)local _gb=string.lower(_fb)if _gb==string.char(47,101,115,112,111,110)then _H=true elseif _gb==string.char(47,101,115,112,111,102,102)then _H=false _ia()elseif _gb==string.char(47,116,101,97,109,99,104,101,99,107,32,111,110)then _I=true _ia()elseif _gb==string.char(47,116,101,97,109,99,104,101,99,107,32,111,102,102)then _I=false _ia()end end)_b.PlayerAdded:Connect(function(_ja)_ja.CharacterAdded:Connect(function()task.wait(0.5)if _H and _Z(_ja)then _ma(_ja)end end)end)_b.PlayerRemoving:Connect(_la)_j:CreateToggle({Name=string.char(83,105,108,101,110,116,32,65,105,109),CurrentValue=false,Flag=string.char(83,105,108,101,110,116,65,105,109,70,108,97,103),Callback=function(_hb)_G.SilentAim=_hb if _hb then pcall(function()_h:Notification({Title=string.char(88,101,100,105,116,105,111),Content=string.char(83,105,108,101,110,116,32,65,105,109,32,65,99,116,105,118,97,116,101,100,33),Duration=2})end)end end,})_j:CreateToggle({Name=string.char(78,111,32,82,101,99,111,105,108),CurrentValue=false,Flag=string.char(78,111,82,101,99,111,105,108,70,108,97,103),Callback=function(_hb)_G.NoRecoil=_hb end,})_j:CreateToggle({Name=string.char(84,114,105,103,103,101,114,98,111,116),CurrentValue=false,Flag=string.char(84,114,105,103,103,101,114,98,111,116,70,108,97,103),Callback=function(_hb)_s.Triggerbot=_hb end,})_j:CreateButton({Name=string.char(84,114,105,103,103,101,114,98,111,116,32,77,111,100,101,58,32,65,108,119,97,121,115,32,79,110,32,47,32,72,111,108,100),Callback=function()_s.TriggerAlwaysOn=not _s.TriggerAlwaysOn pcall(function()_h:Notification({Title=string.char(84,114,105,103,103,101,114,98,111,116,32,77,111,100,101),Content=string.char(67,117,114,114,101,110,116,32,77,111,100,101,58,32)..(_s.TriggerAlwaysOn andstring.char(65,108,119,97,121,115,32,79,110)orstring.char(72,111,108,100,32,75,101,121)),Duration=2})end)end,})_j:CreateKeybind({Name=string.char(84,114,105,103,103,101,114,32,75,101,121),CurrentKeybind=string.char(77,111,117,115,101,66,117,116,116,111,110,49),HoldToInteract=false,Flag=string.char(84,114,105,103,103,101,114,75,101,121,70,108,97,103),Callback=function(_ib)_s.TriggerKey=_ib end,})_j:CreateSlider({Name=string.char(84,114,105,103,103,101,114,32,68,101,108,97,121,32,40,109,115,41),Range={0,1000},Increment=10,CurrentValue=0,Flag=string.char(84,114,105,103,103,101,114,68,101,108,97,121,70,108,97,103),Callback=function(_hb)_s.TriggerDelay=_hb end,})_j:CreateToggle({Name=string.char(83,104,111,119,32,70,79,86,32,67,105,114,99,108,101),CurrentValue=false,Flag=string.char(83,104,111,119,70,111,118,70,108,97,103),Callback=function(_hb)_s.ShowFov=_hb end,})_j:CreateSlider({Name=string.char(70,79,86,32,82,97,100,105,117,115),Range={20,500},Increment=5,CurrentValue=100,Flag=string.char(70,111,118,82,97,100,105,117,115,70,108,97,103),Callback=function(_hb)_s.FovRadius=_hb end,})_j:CreateSlider({Name=string.char(72,101,97,100,32,83,105,122,101),Range={1,10},Increment=0.5,CurrentValue=1,Flag=string.char(72,101,97,100,83,105,122,101,70,108,97,103),Callback=function(_hb)_s.HeadSize=_hb pcall(function()_h:Notification({Title=string.char(72,101,97,100,32,83,105,122,101),Content=string.char(83,105,122,101,32,115,101,116,32,116,111,32)..tostring(_hb),Duration=1.5})end)end,})_k:CreateToggle({Name=string.char(66,111,120,32,38,32,73,110,102,111,32,69,83,80,32,40,80,114,101,115,115,32,75,41),CurrentValue=false,Flag=string.char(69,115,112,84,111,103,103,108,101,70,108,97,103),Callback=function(_hb)_H=_hb if not _H then _ia()end end,})_k:CreateToggle({Name=string.char(80,108,97,121,101,114,32,67,104,97,109,115),CurrentValue=false,Flag=string.char(80,108,97,121,101,114,67,104,97,109,115,70,108,97,103),Callback=function(_hb)_s.PlayerChamsEnabled=_hb end,})_k:CreateToggle({Name=string.char(87,101,97,112,111,110,32,67,104,97,109,115),CurrentValue=false,Flag=string.char(87,101,97,112,111,110,67,104,97,109,115,70,108,97,103),Callback=function(_hb)_s.WeaponChamsEnabled=_hb end,})_k:CreateToggle({Name=string.char(72,101,97,108,116,104,45,66,97,115,101,100,32,67,104,97,109,115),CurrentValue=false,Flag=string.char(72,101,97,108,116,104,67,104,97,109,115,70,108,97,103),Callback=function(_hb)_s.HealthBasedChams=_hb end,})_k:CreateToggle({Name=string.char(84,101,97,109,32,67,104,101,99,107),CurrentValue=true,Flag=string.char(84,101,97,109,67,104,101,99,107,70,108,97,103),Callback=function(_hb)_s.TeamCheck=_hb _I=_hb _ia()end,})_l:CreateToggle({Name=string.char(65,117,116,111,32,66,117,110,110,121,72,111,112),CurrentValue=false,Flag=string.char(66,104,111,112,70,108,97,103),Callback=function(_hb)_G.Bhop=_hb _c.JumpRequest:Connect(function()if _G.Bhop then local _za=_e.Character if _za and _za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100))then _za:FindFirstChildOfClass(string.char(72,117,109,97,110,111,105,100)).Jump=true end end end)end,})
+
+
+local CoreGui = game:GetService("CoreGui")
+local Players = game:GetService("Players")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
+local LocalPlayer = Players.LocalPlayer
+local Workspace = game:GetService("Workspace")
+
+8
+pcall(function()
+    if CoreGui:FindFirstChild("BloxStrikeKeySystem") then CoreGui.BloxStrikeKeySystem:Destroy() end
+    if CoreGui:FindFirstChild("BloxStrikeHub") then CoreGui.BloxStrikeHub:Destroy() end
+    if CoreGui:FindFirstChild("Luna") then CoreGui.Luna:Destroy() end
+    if CoreGui:FindFirstChild("BloxStrikeFOV") then CoreGui.BloxStrikeFOV:Destroy() end
+end)
+
+
+local success, Luna = pcall(function()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
+end)
+
+if not success or not Luna then
+    warn("Failed to load Luna UI Library.")
+    return
+end
+
+local Window = Luna:CreateWindow({
+    Name = "BloxStrike Ultimate Pro v3.5",
+    Subtitle = "Authorized Hub",
+    LogoID = nil,
+    LoadingEnabled = true,
+    LoadingTitle = "BloxStrike Suite v3.5",
+    LoadingSubtitle = "Loading Authorized Menu...",
+    ConfigSettings = {
+        RootFolder = nil,
+        ConfigFolder = "BloxStrikeProV35"
+    },
+    KeySystem = false,
+    KeySettings = {}
+})
+
+Window:CreateHomeTab({
+    SupportedExecutors = {},
+    DiscordInvite = "",
+    Icon = 2,
+})
+
+local CombatTab = Window:CreateTab({ Name = "Combat", Icon = "gps_fixed", ImageSource = "Material", ShowTitle = true })
+local VisualsTab = Window:CreateTab({ Name = "Visuals", Icon = "visibility", ImageSource = "Material", ShowTitle = true })
+local MovementTab = Window:CreateTab({ Name = "Movement", Icon = "flight", ImageSource = "Material", ShowTitle = true })
+local MainTab = Window:CreateTab({ Name = "Main Menu", Icon = "home", ImageSource = "Material", ShowTitle = true })
+local SettingsTab = Window:CreateTab({ Name = "Settings", Icon = "settings", ImageSource = "Material", ShowTitle = true })
+
+
+local FlashGui = Instance.new("ScreenGui")
+FlashGui.Name = "BloxStrikeRedFlash"
+FlashGui.ResetOnSpawn = false
+FlashGui.Parent = CoreGui
+
+local FlashFrame = Instance.new("Frame")
+FlashFrame.Size = UDim2.new(1, 0, 1, 0)
+FlashFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
+FlashFrame.BackgroundTransparency = 1
+FlashFrame.BorderSizePixel = 0
+FlashFrame.ZIndex = 9999
+FlashFrame.Parent = FlashGui
+
+local function triggerRedFlash()
+    task.spawn(function()
+        FlashFrame.BackgroundTransparency = 0.75
+        for i = 0.75, 1, 0.05 do
+            FlashFrame.BackgroundTransparency = i
+            task.wait(0.02)
+        end
+        FlashFrame.BackgroundTransparency = 1
+    end)
+end
+
+
+local S = {
+    Aimbot = false,
+    AimbotPart = "Head",
+    AimKey = Enum.UserInputType.MouseButton2,
+    Triggerbot = false,
+    TriggerKey = Enum.UserInputType.MouseButton1,
+    TriggerAlwaysOn = false,
+    TriggerDelay = 0,
+    ShowFov = false,
+    FovRadius = 100,
+    Smoothness = 0,
+    AimOffset = 0,
+    BoxESP = false,
+    SkeletonESP = false,
+    AccurateHead = false,
+    NormalHead = false,
+    BoxCol = Color3.fromRGB(255, 255, 255),
+    SkelCol = Color3.fromRGB(255, 255, 255),
+    AccCol = Color3.fromRGB(255, 0, 0),
+    NormCol = Color3.fromRGB(0, 255, 0),
+    HeadSize = 1,
+    
+    -- Additional ESP / Chams settings
+    PlayerChamsEnabled = false,
+    WeaponChamsEnabled = false,
+    HealthBasedChams = false,
+    PlayerFillColor = Color3.fromRGB(255, 0, 0),
+    PlayerOutlineColor = Color3.fromRGB(255, 255, 255),
+    PlayerFillTransparency = 0.5,
+    WeaponFillColor = Color3.fromRGB(0, 255, 255),
+    WeaponOutlineColor = Color3.fromRGB(255, 255, 255),
+    WeaponFillTransparency = 0.5,
+    TeamCheck = true
+}
+
+local connections = {}
+local isAiming, isTriggering, cTarget = false, false, nil
+local tbDelay = 0
+local rX, rY = 0, 0
+local eD, aD = {}, {}
+local BONES = {}
+
+local Chams = {}
+local WeaponChams = {}
+local espObjects = {}
+local espEnabled = false
+local teamCheckEnabled = true
+local MyTeam = nil
+
+local CharactersFolder = Workspace:FindFirstChild("Characters") or Workspace
+
+local mouse = LocalPlayer:GetMouse()
+
+local fovGui = Instance.new("ScreenGui")
+fovGui.Name = "BloxStrikeFOV"
+fovGui.ResetOnSpawn = false
+fovGui.Parent = CoreGui
+
+local fovFrame = Instance.new("Frame")
+fovFrame.Size = UDim2.new(0, 200, 0, 200)
+fovFrame.AnchorPoint = Vector2.new(0.5, 0.5)
+fovFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+fovFrame.BackgroundTransparency = 1
+fovFrame.Visible = false
+fovFrame.Parent = fovGui
+
+local fovCorner = Instance.new("UICorner")
+fovCorner.CornerRadius = UDim.new(1, 0)
+fovCorner.Parent = fovFrame
+
+local fovStroke = Instance.new("UIStroke")
+fovStroke.Color = Color3.fromRGB(255, 0, 0)
+fovStroke.Thickness = 1.5
+fovStroke.Parent = fovFrame
+
+local function isValid(t)
+    if not t or not t.Character then return false end
+    if t == LocalPlayer then return false end
+    if LocalPlayer:IsFriendsWith(t.UserId) then return false end
+    local h = t.Character:FindFirstChildOfClass("Humanoid")
+    return h and h.Health > 0 and t.Character:FindFirstChild(S.AimbotPart) ~= nil
+end
+
+
+local function UpdateMyTeam()
+    if not LocalPlayer.Character then return end
+    local charName = LocalPlayer.Character.Name
+    for _, teamFolder in ipairs(CharactersFolder:GetChildren()) do
+        if teamFolder:IsA("Folder") and teamFolder:FindFirstChild(charName) then
+            if MyTeam ~= teamFolder.Name then
+                MyTeam = teamFolder.Name
+            end
+            return MyTeam
+        end
+    end
+end
+
+task.spawn(function()
+    task.wait(1)
+    while true do
+        UpdateMyTeam()
+        task.wait(3)
+    end
+end)
+
+LocalPlayer.CharacterAdded:Connect(function()
+    task.wait(0.8)
+    UpdateMyTeam()
+end)
+
+local function IsSameTeam(plr)
+    if not S.TeamCheck or not MyTeam then return false end
+    if not plr.Character then return false end
+    local charName = plr.Character.Name
+    for _, teamFolder in ipairs(CharactersFolder:GetChildren()) do
+        if teamFolder:IsA("Folder") and teamFolder:FindFirstChild(charName) then
+            return teamFolder.Name == MyTeam
+        end
+    end
+    return false
+end
+
+local function isEnemy(plr)
+    if plr == LocalPlayer then return false end
+    if not teamCheckEnabled then return true end
+    return not IsSameTeam(plr)
+end
+
+local function CreateHighlight(fill, outline, trans)
+    local h = Instance.new("Highlight")
+    h.FillColor = fill
+    h.OutlineColor = outline
+    h.FillTransparency = trans
+    h.OutlineTransparency = 0
+    h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    h.Enabled = true
+    h.Parent = CoreGui
+    return h
+end
+
+local function GetHealthColor(health, maxhealth)
+    local p = math.clamp(health / maxhealth, 0, 1)
+    return Color3.fromRGB((1-p)*255, p*255, 50)
+end
+
+local function clearESP()
+    for player, data in pairs(espObjects) do
+        if data then
+            if data.boxOutline then data.boxOutline:Remove() end
+            if data.boxFill then data.boxFill:Remove() end
+            if data.nameTag then data.nameTag:Remove() end
+            if data.distanceTag then data.distanceTag:Remove() end
+            if data.healthBarBg then data.healthBarBg:Remove() end
+            if data.healthBarFill then data.healthBarFill:Remove() end
+        end
+    end
+    espObjects = {}
+end
+
+local function removeESP(player)
+    if espObjects[player] then
+        local data = espObjects[player]
+        if data.boxOutline then data.boxOutline:Remove() end
+        if data.boxFill then data.boxFill:Remove() end
+        if data.nameTag then data.nameTag:Remove() end
+        if data.distanceTag then data.distanceTag:Remove() end
+        if data.healthBarBg then data.healthBarBg:Remove() end
+        if data.healthBarFill then data.healthBarFill:Remove() end
+        espObjects[player] = nil
+    end
+    if Chams[player] then Chams[player]:Destroy() Chams[player] = nil end
+    if WeaponChams[player] then WeaponChams[player]:Destroy() WeaponChams[player] = nil end
+end
+
+local function createESPForPlayer(player)
+    if player == LocalPlayer then return end
+    if espObjects[player] then return end
+
+    local boxOutline = Drawing.new("Square")
+    boxOutline.Visible = false
+    boxOutline.Color = Color3.new(0, 0, 0)
+    boxOutline.Thickness = 3
+    boxOutline.Filled = false
+
+    local boxFill = Drawing.new("Square")
+    boxFill.Visible = false
+    boxFill.Color = Color3.new(1, 1, 1)
+    boxFill.Thickness = 1
+    boxFill.Filled = false
+
+    local nameTag = Drawing.new("Text")
+    nameTag.Visible = false
+    nameTag.Color = Color3.new(1, 1, 1)
+    nameTag.Size = 13
+    nameTag.Center = true
+    nameTag.Outline = true
+
+    local distanceTag = Drawing.new("Text")
+    distanceTag.Visible = false
+    distanceTag.Color = Color3.new(0.8, 0.8, 0.8)
+    distanceTag.Size = 12
+    distanceTag.Center = true
+    distanceTag.Outline = true
+
+    local healthBarBg = Drawing.new("Square")
+    healthBarBg.Visible = false
+    healthBarBg.Color = Color3.new(0, 0, 0)
+    healthBarBg.Thickness = 1
+    healthBarBg.Filled = true
+
+    local healthBarFill = Drawing.new("Square")
+    healthBarFill.Visible = false
+    healthBarFill.Thickness = 1
+    healthBarFill.Filled = true
+
+    espObjects[player] = {
+        boxOutline = boxOutline,
+        boxFill = boxFill,
+        nameTag = nameTag,
+        distanceTag = distanceTag,
+        healthBarBg = healthBarBg,
+        healthBarFill = healthBarFill
+    }
+end
+
+
+table.insert(connections, UserInputService.InputBegan:Connect(function(i, gp)
+    local k = i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode or i.UserInputType
+    if k == S.AimKey and (not gp or k ~= i.KeyCode) then 
+        isAiming = true 
+        triggerRedFlash()
+    end
+    if k == S.TriggerKey and (not gp or k ~= i.KeyCode) then 
+        isTriggering = true 
+    end
+    if not gp and i.KeyCode == Enum.KeyCode.K then
+        espEnabled = not espEnabled
+        if not espEnabled then clearESP() end
+    end
+end))
+
+table.insert(connections, UserInputService.InputEnded:Connect(function(i)
+    local k = i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode or i.UserInputType
+    if k == S.AimKey then isAiming = false; cTarget = nil end
+    if k == S.TriggerKey then isTriggering = false end
+end))
+
+pcall(function() RunService:BindToRenderStep("DXAimbotLock", 205, function(deltaTime)
+    local Cam = Workspace.CurrentCamera; if not Cam then return end
+
+    pcall(function()
+        fovFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
+        fovFrame.Size = UDim2.new(0, S.FovRadius * 2, 0, S.FovRadius * 2)
+        fovFrame.Visible = S.ShowFov
+        fovStroke.Color = Color3.fromRGB(255, 0, 0)
+    end)
+
+    pcall(function()
+        if S.HeadSize and S.HeadSize > 1 then
+            for _, p in pairs(Players:GetPlayers()) do
+                if p ~= LocalPlayer and isEnemy(p) and p.Character then
+                    local head = p.Character:FindFirstChild("Head")
+                    local hum = p.Character:FindFirstChildOfClass("Humanoid")
+                    if head and hum and hum.Health > 0 then
+                        head.Size = Vector3.new(S.HeadSize, S.HeadSize, S.HeadSize)
+                        head.CanCollide = false
+                        head.Transparency = 0.5
+                    end
+                end
+            end
+        end
+    end)
+
+    -- Chams Update
+    for _, plr in ipairs(Players:GetPlayers()) do
+        if plr ~= LocalPlayer then
+            if IsSameTeam(plr) then
+                if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
+                if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+            else
+                local char = plr.Character
+                if char then
+                    local hum = char:FindFirstChildOfClass("Humanoid")
+                    if hum and hum.Health > 0 then
+                        if S.PlayerChamsEnabled then
+                            if not Chams[plr] then
+                                Chams[plr] = CreateHighlight(S.PlayerFillColor, S.PlayerOutlineColor, S.PlayerFillTransparency)
+                            end
+                            if S.HealthBasedChams then
+                                Chams[plr].FillColor = GetHealthColor(hum.Health, hum.MaxHealth)
+                            else
+                                Chams[plr].FillColor = S.PlayerFillColor
+                            end
+                            Chams[plr].Adornee = char
+                        else
+                            if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
+                        end
+
+                        if S.WeaponChamsEnabled then
+                            local debris = Workspace:FindFirstChild("Debris")
+                            local weapon = debris and debris:FindFirstChild(plr.Name .. "_Weapon")
+                            if weapon then
+                                if not WeaponChams[plr] then
+                                    WeaponChams[plr] = CreateHighlight(S.WeaponFillColor, S.WeaponOutlineColor, S.WeaponFillTransparency)
+                                end
+                                WeaponChams[plr].Adornee = weapon
+                            end
+                        else
+                            if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                        end
+                    else
+                        if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
+                        if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                    end
+                else
+                    if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
+                    if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                end
+            end
+        end
+    end
+
+    -- Box & Tag ESP Loop
+    if espEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                if isEnemy(player) then
+                    local char = player.Character
+                    local root = char and char:FindFirstChild("HumanoidRootPart")
+                    local head = char and char:FindFirstChild("Head")
+                    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
+
+                    if root and head and humanoid and humanoid.Health > 0 then
+                        if not espObjects[player] then
+                            createESPForPlayer(player)
+                        end
+
+                        local data = espObjects[player]
+                        if data then
+                            local rootPos, rootOnScreen = Cam:WorldToViewportPoint(root.Position)
+                            local headPos, headOnScreen = Cam:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
+
+                            if not rootOnScreen and not headOnScreen then
+                                data.boxOutline.Visible = false
+                                data.boxFill.Visible = false
+                                data.nameTag.Visible = false
+                                data.distanceTag.Visible = false
+                                data.healthBarBg.Visible = false
+                                data.healthBarFill.Visible = false
+                            else
+                                local height = math.abs(headPos.Y - rootPos.Y)
+                                local width = height / 2
+                                local boxX = rootPos.X - width / 2
+                                local boxY = rootPos.Y
+
+                                data.boxOutline.Visible = true
+                                data.boxOutline.Position = Vector2.new(boxX, boxY)
+                                data.boxOutline.Size = Vector2.new(width, height)
+
+                                data.boxFill.Visible = true
+                                data.boxFill.Position = Vector2.new(boxX, boxY)
+                                data.boxFill.Size = Vector2.new(width, height)
+
+                                data.nameTag.Visible = true
+                                data.nameTag.Text = player.Name
+                                data.nameTag.Position = Vector2.new(rootPos.X, boxY - 14)
+
+                                local dist = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
+                                    and (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
+                                    or 0
+                                data.distanceTag.Visible = true
+                                data.distanceTag.Text = string.format("%.0f m", dist)
+                                data.distanceTag.Position = Vector2.new(rootPos.X, boxY + height + 2)
+
+                                local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+                                local barWidth = 2
+                                local barHeight = height
+                                local barX = boxX - barWidth - 2
+                                local barY = boxY
+
+                                data.healthBarBg.Visible = true
+                                data.healthBarBg.Position = Vector2.new(barX, barY)
+                                data.healthBarBg.Size = Vector2.new(barWidth, barHeight)
+
+                                data.healthBarFill.Visible = true
+                                data.healthBarFill.Position = Vector2.new(barX, barY + barHeight * (1 - healthPercent))
+                                data.healthBarFill.Size = Vector2.new(barWidth, barHeight * barHeight * (healthPercent / barHeight)) -- safe size calculation
+                                data.healthBarFill.Size = Vector2.new(barWidth, barHeight * healthPercent)
+                                data.healthBarFill.Color = Color3.new(1 - healthPercent, healthPercent, 0)
+                            end
+                        end
+                    else
+                        removeESP(player)
+                    end
+                else
+                    removeESP(player)
+                end
+            end
+        end
+    end
+
+    if S.Triggerbot and (S.TriggerAlwaysOn or isTriggering) and tick()-tbDelay>(S.TriggerDelay/1000) then
+        local target=mouse.Target
+        if target then
+            local char=target.Parent
+            if char and not char:FindFirstChildOfClass("Humanoid") then char=char.Parent end
+            if char and char:IsA("Model") and char:FindFirstChildOfClass("Humanoid") then
+                local p=Players:GetPlayerFromCharacter(char)
+                if p and p~=LocalPlayer and isValid(p) then
+                    if mouse1click then mouse1click(); tbDelay=tick() end
+                end
+            end
+        end
+    end
+
+    if S.Aimbot and isAiming then
+        if not isValid(cTarget) then
+            local sDist,cCen=S.FovRadius,Cam.ViewportSize/2
+            for _,p in pairs(Players:GetPlayers()) do
+                if p~=LocalPlayer and isValid(p) then
+                    local pS,oS=Cam:WorldToViewportPoint(p.Character[S.AimbotPart].Position)
+                    if oS then local dist=(Vector2.new(pS.X,pS.Y)-cCen).Magnitude; if dist<=sDist then cTarget,sDist=p,dist end end
+                end
+            end
+        end
+        if cTarget then
+            local tPos=cTarget.Character[S.AimbotPart].Position+Vector3.new(0,S.AimOffset,0)
+            local sPos,onScreen=Cam:WorldToViewportPoint(tPos)
+            if onScreen then
+                if mousemoverel then
+                    local sm=(1.1-S.Smoothness)*20*deltaTime
+                    local rawX=(sPos.X-Cam.ViewportSize.X/2)*sm+rX; local rawY=(sPos.Y-Cam.ViewportSize.Y/2)*sm+rY
+                    local mX,mY=math.floor(rawX),math.floor(rawY); rX,rY=rawX-mX,rawY-mY
+                    if mX~=0 or mY~=0 then mousemoverel(mX,mY) end
+                else Cam.CFrame=Cam.CFrame:Lerp(CFrame.lookAt(Cam.CFrame.Position,tPos),(1.1-S.Smoothness)*10*deltaTime) end
+            end
+        end
+    else rX,rY=0,0 end
+end) end)
+
+
+LocalPlayer.Chatted:Connect(function(msg)
+    local cmd = string.lower(msg)
+    if cmd == "/espon" then
+        espEnabled = true
+    elseif cmd == "/espoff" then
+        espEnabled = false
+        clearESP()
+    elseif cmd == "/teamcheck on" then
+        teamCheckEnabled = true
+        clearESP()
+    elseif cmd == "/teamcheck off" then
+        teamCheckEnabled = false
+        clearESP()
+    end
+end)
+
+Players.PlayerAdded:Connect(function(player)
+    player.CharacterAdded:Connect(function()
+        task.wait(0.5)
+        if espEnabled and isEnemy(player) then
+            createESPForPlayer(player)
+        end
+    end)
+end)
+
+Players.PlayerRemoving:Connect(removeESP)
+
+
+CombatTab:CreateToggle({
+   Name = "Silent Aim",
+   CurrentValue = false,
+   Flag = "SilentAimFlag",
+   Callback = function(Value)
+      _G.SilentAim = Value
+      if Value then
+          pcall(function()
+              Luna:Notification({
+                  Title = "Xeditio",
+                  Content = "Silent Aim Activated!",
+                  Duration = 2
+              })
+          end)
+      end
+   end,
+})
+
+CombatTab:CreateToggle({
+   Name = "No Recoil",
+   CurrentValue = false,
+   Flag = "NoRecoilFlag",
+   Callback = function(Value)
+      _G.NoRecoil = Value
+   end,
+})
+
+CombatTab:CreateToggle({
+   Name = "Triggerbot",
+   CurrentValue = false,
+   Flag = "TriggerbotFlag",
+   Callback = function(Value)
+      S.Triggerbot = Value
+   end,
+})
+
+CombatTab:CreateButton({
+   Name = "Triggerbot Mode: Always On / Hold",
+   Callback = function()
+      S.TriggerAlwaysOn = not S.TriggerAlwaysOn
+      pcall(function()
+          Luna:Notification({
+              Title = "Triggerbot Mode",
+              Content = "Current Mode: " .. (S.TriggerAlwaysOn and "Always On" or "Hold Key"),
+              Duration = 2
+          })
+      end)
+   end,
+})
+
+CombatTab:CreateKeybind({
+   Name = "Trigger Key",
+   CurrentKeybind = "MouseButton1",
+   HoldToInteract = false,
+   Flag = "TriggerKeyFlag",
+   Callback = function(Keybind)
+      S.TriggerKey = Keybind
+   end,
+})
+
+CombatTab:CreateSlider({
+   Name = "Trigger Delay (ms)",
+   Range = {0, 1000},
+   Increment = 10,
+   CurrentValue = 0,
+   Flag = "TriggerDelayFlag",
+   Callback = function(Value)
+      S.TriggerDelay = Value
+   end,
+})
+
+CombatTab:CreateToggle({
+   Name = "Show FOV Circle",
+   CurrentValue = false,
+   Flag = "ShowFovFlag",
+   Callback = function(Value)
+      S.ShowFov = Value
+   end,
+})
+
+CombatTab:CreateSlider({
+   Name = "FOV Radius",
+   Range = {20, 500},
+   Increment = 5,
+   CurrentValue = 100,
+   Flag = "FovRadiusFlag",
+   Callback = function(Value)
+      S.FovRadius = Value
+   end,
+})
+
+CombatTab:CreateSlider({
+   Name = "Head Size",
+   Range = {1, 10},
+   Increment = 0.5,
+   CurrentValue = 1,
+   Flag = "HeadSizeFlag",
+   Callback = function(Value)
+      S.HeadSize = Value
+      pcall(function()
+          Luna:Notification({
+              Title = "Head Size",
+              Content = "Size set to " .. tostring(Value),
+              Duration = 1.5
+          })
+      end)
+   end,
+})
+
+
+VisualsTab:CreateToggle({
+   Name = "Box & Info ESP (Press K)",
+   CurrentValue = false,
+   Flag = "EspToggleFlag",
+   Callback = function(Value)
+      espEnabled = Value
+      if not espEnabled then clearESP() end
+   end,
+})
+
+VisualsTab:CreateToggle({
+   Name = "Player Chams",
+   CurrentValue = false,
+   Flag = "PlayerChamsFlag",
+   Callback = function(Value)
+      S.PlayerChamsEnabled = Value
+   end,
+})
+
+VisualsTab:CreateToggle({
+   Name = "Weapon Chams",
+   CurrentValue = false,
+   Flag = "WeaponChamsFlag",
+   Callback = function(Value)
+      S.WeaponChamsEnabled = Value
+   end,
+})
+
+VisualsTab:CreateToggle({
+   Name = "Health-Based Chams",
+   CurrentValue = false,
+   Flag = "HealthChamsFlag",
+   Callback = function(Value)
+      S.HealthBasedChams = Value
+   end,
+})
+
+VisualsTab:CreateToggle({
+   Name = "Team Check",
+   CurrentValue = true,
+   Flag = "TeamCheckFlag",
+   Callback = function(Value)
+      S.TeamCheck = Value
+      teamCheckEnabled = Value
+      clearESP()
+   end,
+})
+
+
+MovementTab:CreateToggle({
+   Name = "Auto BunnyHop",
+   CurrentValue = false,
+   Flag = "BhopFlag",
+   Callback = function(Value)
+      _G.Bhop = Value
+      UserInputService.JumpRequest:Connect(function()
+         if _G.Bhop then
+            local char = LocalPlayer.Character
+            if char and char:FindFirstChildOfClass("Humanoid") then
+               char:FindFirstChildOfClass("Humanoid").Jump = true
+            end
+         end
+      end)
+   end,
+})
