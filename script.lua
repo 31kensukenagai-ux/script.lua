@@ -1,4 +1,4 @@
--- BloxStrike Ultimate Suite v3.5 | Clean Integration (ESP & Chams Added)
+
 
 local CoreGui = game:GetService("CoreGui")
 local Players = game:GetService("Players")
