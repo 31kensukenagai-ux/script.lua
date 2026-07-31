@@ -1,15 +1,15 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-	Name = "Torrycxn&Clotter",
+	Name = "FORCES SİKTİ .gg/berkforces",
 	Subtitle = nil,
 	LogoID = nil,
 	LoadingEnabled = true,
-	LoadingTitle = "Torrycxn&Clotter",
-	LoadingSubtitle = "by Torrycxn",
+	LoadingTitle = "OE HUB",
+	LoadingSubtitle = "by saldı",
 	ConfigSettings = {
 		RootFolder = nil,
-		ConfigFolder = "Torrycxn&Clotter Hub"
+		ConfigFolder = "OE Hub"
 	},
 	KeySystem = false,
 	KeySettings = {}
@@ -51,36 +51,16 @@ local S = {
     NoRecoil = false,
     Bhop = false,
     Aimbot = false,
-    ToggleKey = Enum.KeyCode.E, -- Aimbot açma/kapatma tuşu
+    ToggleKey = Enum.KeyCode.E,
     TargetPart = "Head",
     BoxESP = false,
     BoxCol = Color3.fromRGB(0, 255, 137),
-    SkeletonESP = false,
-    SkelCol = Color3.fromRGB(255, 255, 255),
 }
 
 local tbDelay = 0
 local isTriggering = false
 local mouse = LocalPlayer:GetMouse()
 local eD = {}
-local aD = {}
-local BONES = {
-    {"Head", "HumanoidRootPart"},
-    {"HumanoidRootPart", "UpperTorso"},
-    {"UpperTorso", "LowerTorso"},
-    {"UpperTorso", "LeftUpperArm"},
-    {"LeftUpperArm", "LeftLowerArm"},
-    {"LeftLowerArm", "LeftHand"},
-    {"UpperTorso", "RightUpperArm"},
-    {"RightUpperArm", "RightLowerArm"},
-    {"RightLowerArm", "RightHand"},
-    {"LowerTorso", "LeftUpperLeg"},
-    {"LeftUpperLeg", "LeftLowerLeg"},
-    {"LeftLowerLeg", "LeftFoot"},
-    {"LowerTorso", "RightUpperLeg"},
-    {"RightUpperLeg", "RightLowerLeg"},
-    {"RightLowerLeg", "RightFoot"}
-}
 
 -- ===================== VISUALS (ESP) TAB =====================
 local VisualsTab = Window:CreateTab({
@@ -114,14 +94,6 @@ VisualsTab:CreateToggle({
 		end
 	end
 }, "ESPToggle")
-
-VisualsTab:CreateToggle({
-	Name = "Skeleton ESP",
-	CurrentValue = false,
-	Callback = function(Value)
-		S.SkeletonESP = Value
-	end
-}, "SkeletonESPToggle")
 
 VisualsTab:CreateToggle({
 	Name = "Player Chams",
@@ -304,13 +276,12 @@ UserInputService.JumpRequest:Connect(function()
    end
 end)
 
--- Yeni Aimbot & FOV Çemberi Tanımlaması
 local Circle = Drawing.new("Circle")
 Circle.Thickness = 2
 Circle.Color = Color3.fromRGB(255, 0, 0)
 Circle.Transparency = 0.6
 Circle.Filled = false
-Circle.Visible = true
+Circle.Visible = false
 
 UserInputService.InputBegan:Connect(function(i, gp)
     if gp then return end
@@ -451,14 +422,6 @@ local function createESPForPlayer(player)
         table.insert(lines, l)
     end
     eD[player] = {L = lines}
-
-    local skelLines = {}
-    for i = 1, #BONES do
-        local l = Drawing.new("Line")
-        l.Visible = false
-        table.insert(skelLines, l)
-    end
-    aD[player] = {L = skelLines}
 end
 
 local function removeESP(player)
@@ -480,12 +443,6 @@ local function removeESP(player)
         end)
         eD[player] = nil
     end
-    if aD[player] then
-        pcall(function()
-            for _, l in pairs(aD[player].L) do l:Remove() end
-        end)
-        aD[player] = nil
-    end
 end
 
 local function isValid(plr)
@@ -501,13 +458,11 @@ end
 RunService.RenderStepped:Connect(function(deltaTime)
     if not Camera then return end
 
-    -- FOV & Aimbot Görsel/Çember Güncellemesi (Arayüz ayarlarıyla senkronize edildi)
     local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
     Circle.Position = center
     Circle.Radius = S.FovRadius
     Circle.Visible = S.ShowFov
 
-    -- Yeni Aimbot Mantığı
     if S.Aimbot and MyTeam then
         local best = nil
         local bestDist = S.FovRadius + 1
@@ -531,11 +486,8 @@ RunService.RenderStepped:Connect(function(deltaTime)
                 end
             end
         end
-
-        -- Eğer hedef varsa kamera yönünü eşitleme (Gerekirse buraya ekleme yapılabilir)
     end
 
-    -- Head Size Logic
     for _, p in pairs(Players:GetPlayers()) do
         if p ~= LocalPlayer and p.Character then
             local head = p.Character:FindFirstChild("Head")
@@ -553,7 +505,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         end
     end
 
-    -- Triggerbot
     if S.Triggerbot and (S.TriggerAlwaysOn or isTriggering) and tick() - tbDelay > (S.TriggerDelay / 1000) then
         local target = mouse.Target
         if target then
@@ -568,7 +519,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         end
     end
 
-    -- Box & Info ESP Logic
     if not S.ESPEnabled then
         for _, data in pairs(espObjects) do
             if data then
@@ -667,7 +617,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         end
     end
 
-    -- Render Step ESP / Skeleton Extra Loop
     for p, d in pairs(eD) do
         local ch = p.Character
         local hrp = ch and ch:FindFirstChild("HumanoidRootPart")
@@ -696,50 +645,13 @@ RunService.RenderStepped:Connect(function(deltaTime)
                     if l then pcall(function() l.Visible = false end) end
                 end
             end
-
-            local sD = aD[p]
-            if sD then
-                if S.SkeletonESP then
-                    for i, bn in ipairs(BONES) do
-                        if sD.L[i] then
-                            local p1, p2 = ch:FindFirstChild(bn[1]), ch:FindFirstChild(bn[2])
-                            if p1 and p2 then
-                                local sp1, o1 = Camera:WorldToViewportPoint(p1.Position - (p1 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
-                                local sp2, o2 = Camera:WorldToViewportPoint(p2.Position - (p2 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
-                                if o1 and o2 then
-                                    pcall(function()
-                                        sD.L[i].Color = S.SkelCol
-                                        sD.L[i].From = Vector2.new(sp1.X, sp1.Y)
-                                        sD.L[i].To = Vector2.new(sp2.X, sp2.Y)
-                                        sD.L[i].Visible = true
-                                    end)
-                                else
-                                    pcall(function() sD.L[i].Visible = false end)
-                                end
-                            else
-                                pcall(function() sD.L[i].Visible = false end)
-                            end
-                        end
-                    end
-                else
-                    for _, l in pairs(sD.L) do
-                        if l then pcall(function() l.Visible = false end) end
-                    end
-                end
-            end
         else
             for _, l in pairs(d.L) do
                 if l then pcall(function() l.Visible = false end) end
             end
-            if aD[p] then
-                for _, l in pairs(aD[p].L) do
-                    if l then pcall(function() l.Visible = false end) end
-                end
-            end
         end
     end
 
-    -- Chams Logic
     for _, plr in ipairs(Players:GetPlayers()) do
         if plr ~= LocalPlayer then
             if IsSameTeam(plr) then
