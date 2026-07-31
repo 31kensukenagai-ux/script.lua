@@ -1,15 +1,15 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-	Name = "Torrycxn&Clotter HUB",
+	Name = "Torrycxn&Clotter",
 	Subtitle = nil,
 	LogoID = nil,
 	LoadingEnabled = true,
-	LoadingTitle = "Torrycxn&Clotter HUB",
+	LoadingTitle = "Torrycxn&Clotter",
 	LoadingSubtitle = "by Torrycxn",
 	ConfigSettings = {
 		RootFolder = nil,
-		ConfigFolder = "Torrycxn Hub"
+		ConfigFolder = "Torrycxn&Clotter Hub"
 	},
 	KeySystem = false,
 	KeySettings = {}
@@ -26,6 +26,7 @@ local LocalPlayer = Players.LocalPlayer
 local RunService = game:GetService("RunService")
 local UserInputService = game:GetService("UserInputService")
 local Workspace = game:GetService("Workspace")
+local Camera = Workspace.CurrentCamera
 local CharactersFolder = Workspace:FindFirstChild("Characters") or Workspace
 
 local MyTeam = nil
@@ -50,22 +51,14 @@ local S = {
     NoRecoil = false,
     Bhop = false,
     Aimbot = false,
-    isAiming = false,
-    cTarget = nil,
-    AimbotPart = "Head",
-    AimOffset = 0,
-    Smoothness = 0.5,
+    ToggleKey = Enum.KeyCode.E, -- Aimbot açma/kapatma tuşu
+    TargetPart = "Head",
     BoxESP = false,
     BoxCol = Color3.fromRGB(0, 255, 137),
     SkeletonESP = false,
     SkelCol = Color3.fromRGB(255, 255, 255),
-    AccurateHead = false,
-    AccCol = Color3.fromRGB(255, 0, 0),
-    NormalHead = false,
-    NormCol = Color3.fromRGB(0, 255, 0),
 }
 
-local rX, rY = 0, 0
 local tbDelay = 0
 local isTriggering = false
 local mouse = LocalPlayer:GetMouse()
@@ -295,12 +288,12 @@ MovementTab:CreateToggle({
    Name = "Auto BunnyHop",
    CurrentValue = false,
    Callback = function(Value)
-      S.Bhp = Value
+      S.Bhop = Value
    end
 }, "BhopToggle")
 
 UserInputService.JumpRequest:Connect(function()
-   if S.Bhp then
+   if S.Bhop then
       local char = LocalPlayer.Character
       if char then
          local hum = char:FindFirstChildOfClass("Humanoid")
@@ -311,31 +304,28 @@ UserInputService.JumpRequest:Connect(function()
    end
 end)
 
--- FOV Circle Drawing (Kırmızı ve ayarlanabilir boyut)
-local fovDrawing = Drawing.new("Circle")
-fovDrawing.Visible = false
-fovDrawing.Thickness = 1
-fovDrawing.NumSides = 64
-fovDrawing.Color = Color3.fromRGB(255, 0, 0)
-fovDrawing.Filled = false
+-- Yeni Aimbot & FOV Çemberi Tanımlaması
+local Circle = Drawing.new("Circle")
+Circle.Thickness = 2
+Circle.Color = Color3.fromRGB(255, 0, 0)
+Circle.Transparency = 0.6
+Circle.Filled = false
+Circle.Visible = true
 
-UserInputService.InputBegan:Connect(function(input, gp)
+UserInputService.InputBegan:Connect(function(i, gp)
     if gp then return end
-    if input.KeyCode == S.TriggerKey then
-        isTriggering = true
+    if i.KeyCode == S.ToggleKey then
+        S.Aimbot = not S.Aimbot
+        print("Aimbot:", S.Aimbot)
     end
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then
-        S.isAiming = true
+    if i.KeyCode == S.TriggerKey then
+        isTriggering = true
     end
 end)
 
 UserInputService.InputEnded:Connect(function(input)
     if input.KeyCode == S.TriggerKey then
         isTriggering = false
-    end
-    if input.UserInputType == Enum.UserInputType.MouseButton2 then
-        S.isAiming = false
-        S.cTarget = nil
     end
 end)
 
@@ -509,15 +499,41 @@ local function isValid(plr)
 end
 
 RunService.RenderStepped:Connect(function(deltaTime)
-    local Cam = workspace.CurrentCamera
-    if not Cam then return end
+    if not Camera then return end
 
-    -- FOV circle update
-    pcall(function()
-        fovDrawing.Visible = S.ShowFov
-        fovDrawing.Radius = S.FovRadius
-        fovDrawing.Position = UserInputService:GetMouseLocation()
-    end)
+    -- FOV & Aimbot Görsel/Çember Güncellemesi (Arayüz ayarlarıyla senkronize edildi)
+    local center = Vector2.new(Camera.ViewportSize.X / 2, Camera.ViewportSize.Y / 2)
+    Circle.Position = center
+    Circle.Radius = S.FovRadius
+    Circle.Visible = S.ShowFov
+
+    -- Yeni Aimbot Mantığı
+    if S.Aimbot and MyTeam then
+        local best = nil
+        local bestDist = S.FovRadius + 1
+
+        for _, plr in ipairs(Players:GetPlayers()) do
+            if plr == LocalPlayer or IsSameTeam(plr) then continue end
+            local char = plr.Character
+            if not char then continue end
+            local hum = char:FindFirstChildOfClass("Humanoid")
+            if not hum or hum.Health <= 0 then continue end
+
+            local part = char:FindFirstChild(S.TargetPart) or char:FindFirstChild("HumanoidRootPart")
+            if part then
+                local pos, onScreen = Camera:WorldToViewportPoint(part.Position)
+                if onScreen then
+                    local dist = (Vector2.new(pos.X, pos.Y) - center).Magnitude
+                    if dist < bestDist then
+                        bestDist = dist
+                        best = Vector2.new(pos.X, pos.Y)
+                    end
+                end
+            end
+        end
+
+        -- Eğer hedef varsa kamera yönünü eşitleme (Gerekirse buraya ekleme yapılabilir)
+    end
 
     -- Head Size Logic
     for _, p in pairs(Players:GetPlayers()) do
@@ -537,11 +553,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         end
     end
 
-    -- No Recoil Logic
-    if S.NoRecoil then
-        -- Recoil suppression logic loop
-    end
-
     -- Triggerbot
     if S.Triggerbot and (S.TriggerAlwaysOn or isTriggering) and tick() - tbDelay > (S.TriggerDelay / 1000) then
         local target = mouse.Target
@@ -555,42 +566,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
                 end
             end
         end
-    end
-
-    -- Aimbot
-    if S.Aimbot and S.isAiming then
-        if not isValid(S.cTarget) then
-            local sDist, cCen = S.FovRadius, Cam.ViewportSize / 2
-            for _, p in pairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and isValid(p) then
-                    local pS, oS = Cam:WorldToViewportPoint(p.Character[S.AimbotPart].Position)
-                    if oS then
-                        local dist = (Vector2.new(pS.X, pS.Y) - cCen).Magnitude
-                        if dist <= sDist then
-                            S.cTarget, sDist = p, dist
-                        end
-                    end
-                end
-            end
-        end
-        if S.cTarget and S.cTarget.Character and S.cTarget.Character:FindFirstChild(S.AimbotPart) then
-            local tPos = S.cTarget.Character[S.AimbotPart].Position + Vector3.new(0, S.AimOffset, 0)
-            local sPos, onScreen = Cam:WorldToViewportPoint(tPos)
-            if onScreen then
-                if mousemoverel then
-                    local sm = (1.1 - S.Smoothness) * 20 * deltaTime
-                    local rawX = (sPos.X - Cam.ViewportSize.X / 2) * sm + rX
-                    local rawY = (sPos.Y - Cam.ViewportSize.Y / 2) * sm + rY
-                    local mX, mY = math.floor(rawX), math.floor(rawY)
-                    rX, rY = rawX - mX, rawY - mY
-                    if mX ~= 0 or mY ~= 0 then mousemoverel(mX, mY) end
-                else
-                    Cam.CFrame = Cam.CFrame:Lerp(CFrame.lookAt(Cam.CFrame.Position, tPos), (1.1 - S.Smoothness) * 10 * deltaTime)
-                end
-            end
-        end
-    else
-        rX, rY = 0, 0
     end
 
     -- Box & Info ESP Logic
@@ -629,8 +604,8 @@ RunService.RenderStepped:Connect(function(deltaTime)
                         data.healthBarFill.Visible = false
                     end)
                 else
-                    local rootPos, rootOnScreen = Cam:WorldToScreenPoint(root.Position)
-                    local headPos, headOnScreen = Cam:WorldToScreenPoint(head.Position + Vector3.new(0, 0.5, 0))
+                    local rootPos, rootOnScreen = Camera:WorldToScreenPoint(root.Position)
+                    local headPos, headOnScreen = Camera:WorldToScreenPoint(head.Position + Vector3.new(0, 0.5, 0))
 
                     if not rootOnScreen and not headOnScreen then
                         pcall(function()
@@ -698,11 +673,11 @@ RunService.RenderStepped:Connect(function(deltaTime)
         local hrp = ch and ch:FindFirstChild("HumanoidRootPart")
         if hrp and isEnemy(p) then
             local hd = ch:FindFirstChild("Head") or hrp
-            local tP, tO = Cam:WorldToViewportPoint(hd.Position + Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2 + 0.5, 0))
-            local bP, bO = Cam:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
+            local tP, tO = Camera:WorldToViewportPoint(hd.Position + Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2 + 0.5, 0))
+            local bP, bO = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
             if S.BoxESP and tO and bO then
                 local w = math.abs(tP.Y - bP.Y) * 0.65
-                local hV = Cam:WorldToViewportPoint(hrp.Position)
+                local hV = Camera:WorldToViewportPoint(hrp.Position)
                 local w2 = w / 2
                 local xs = {hV.X - w2, hV.X + w2, hV.X + w2, hV.X - w2}
                 local ys = {tP.Y, tP.Y, bP.Y, bP.Y}
@@ -729,8 +704,8 @@ RunService.RenderStepped:Connect(function(deltaTime)
                         if sD.L[i] then
                             local p1, p2 = ch:FindFirstChild(bn[1]), ch:FindFirstChild(bn[2])
                             if p1 and p2 then
-                                local sp1, o1 = Cam:WorldToViewportPoint(p1.Position - (p1 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
-                                local sp2, o2 = Cam:WorldToViewportPoint(p2.Position - (p2 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
+                                local sp1, o1 = Camera:WorldToViewportPoint(p1.Position - (p1 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
+                                local sp2, o2 = Camera:WorldToViewportPoint(p2.Position - (p2 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
                                 if o1 and o2 then
                                     pcall(function()
                                         sD.L[i].Color = S.SkelCol
