@@ -1,171 +1,343 @@
-
-
-local CoreGui = game:GetService("CoreGui")
-local Players = game:GetService("Players")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local LocalPlayer = Players.LocalPlayer
-local Workspace = game:GetService("Workspace")
-
-8
-pcall(function()
-    if CoreGui:FindFirstChild("BloxStrikeKeySystem") then CoreGui.BloxStrikeKeySystem:Destroy() end
-    if CoreGui:FindFirstChild("BloxStrikeHub") then CoreGui.BloxStrikeHub:Destroy() end
-    if CoreGui:FindFirstChild("Luna") then CoreGui.Luna:Destroy() end
-    if CoreGui:FindFirstChild("BloxStrikeFOV") then CoreGui.BloxStrikeFOV:Destroy() end
-end)
-
-if gethui and not cloneref then
-    pcall(function()
-        local coreGui = game:GetService("CoreGui")
-    end)
-end
-
-local success, Luna = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
-end)
-
-if not success or not Luna then
-    warn("Failed to load Luna UI Library.")
-    return
-end
+local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-    Name = "BloxStrike Ultimate Pro v3.5",
-    Subtitle = "Authorized Hub",
-    LogoID = nil,
-    LoadingEnabled = true,
-    LoadingTitle = "BloxStrike Suite v3.5",
-    LoadingSubtitle = "Loading Authorized Menu...",
-    ConfigSettings = {
-        RootFolder = nil,
-        ConfigFolder = "BloxStrikeProV35"
-    },
-    KeySystem = false,
-    KeySettings = {}
+	Name = "FORCES SİKTİ .gg/berkforces",
+	Subtitle = nil,
+	LogoID = nil,
+	LoadingEnabled = true,
+	LoadingTitle = "OE HUB",
+	LoadingSubtitle = "by saldı",
+	ConfigSettings = {
+		RootFolder = nil,
+		ConfigFolder = "OE Hub"
+	},
+	KeySystem = false,
+	KeySettings = {}
 })
 
 Window:CreateHomeTab({
-    SupportedExecutors = {},
-    DiscordInvite = "",
-    Icon = 2,
+	SupportedExecutors = {},
+	DiscordInvite = "ZF5fTWPh5a",
+	Icon = 2,
 })
 
-local CombatTab = Window:CreateTab({ Name = "Combat", Icon = "gps_fixed", ImageSource = "Material", ShowTitle = true })
-local VisualsTab = Window:CreateTab({ Name = "Visuals", Icon = "visibility", ImageSource = "Material", ShowTitle = true })
-local MovementTab = Window:CreateTab({ Name = "Movement", Icon = "flight", ImageSource = "Material", ShowTitle = true })
-local MainTab = Window:CreateTab({ Name = "Main Menu", Icon = "home", ImageSource = "Material", ShowTitle = true })
-local SettingsTab = Window:CreateTab({ Name = "Settings", Icon = "settings", ImageSource = "Material", ShowTitle = true })
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local RunService = game:GetService("RunService")
+local UserInputService = game:GetService("UserInputService")
+local Workspace = game:GetService("Workspace")
+local CharactersFolder = Workspace:FindFirstChild("Characters") or Workspace
 
-
-local FlashGui = Instance.new("ScreenGui")
-FlashGui.Name = "BloxStrikeRedFlash"
-FlashGui.ResetOnSpawn = false
-FlashGui.Parent = CoreGui
-
-local FlashFrame = Instance.new("Frame")
-FlashFrame.Size = UDim2.new(1, 0, 1, 0)
-FlashFrame.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
-FlashFrame.BackgroundTransparency = 1
-FlashFrame.BorderSizePixel = 0
-FlashFrame.ZIndex = 9999
-FlashFrame.Parent = FlashGui
-
-local function triggerRedFlash()
-    task.spawn(function()
-        FlashFrame.BackgroundTransparency = 0.75
-        for i = 0.75, 1, 0.05 do
-            FlashFrame.BackgroundTransparency = i
-            task.wait(0.02)
-        end
-        FlashFrame.BackgroundTransparency = 1
-    end)
-end
-
+local MyTeam = nil
+local espObjects = {}
+local chamsObjects = {}
+local weaponChamsObjects = {}
 
 local S = {
-    Aimbot = false,
-    AimbotPart = "Head",
-    AimKey = Enum.UserInputType.MouseButton2,
-    Triggerbot = false,
-    TriggerKey = Enum.UserInputType.MouseButton1,
-    TriggerAlwaysOn = false,
-    TriggerDelay = 0,
-    ShowFov = false,
-    FovRadius = 100,
-    Smoothness = 0,
-    AimOffset = 0,
-    BoxESP = false,
-    SkeletonESP = false,
-    AccurateHead = false,
-    NormalHead = false,
-    BoxCol = Color3.fromRGB(255, 255, 255),
-    SkelCol = Color3.fromRGB(255, 255, 255),
-    AccCol = Color3.fromRGB(255, 0, 0),
-    NormCol = Color3.fromRGB(0, 255, 0),
-    HeadSize = 1,
-    
-    -- Additional ESP / Chams settings
+    ESPEnabled = false,
     PlayerChamsEnabled = false,
     WeaponChamsEnabled = false,
     HealthBasedChams = false,
-    PlayerFillColor = Color3.fromRGB(255, 0, 0),
-    PlayerOutlineColor = Color3.fromRGB(255, 255, 255),
-    PlayerFillTransparency = 0.5,
-    WeaponFillColor = Color3.fromRGB(0, 255, 255),
-    WeaponOutlineColor = Color3.fromRGB(255, 255, 255),
-    WeaponFillTransparency = 0.5,
-    TeamCheck = true
+    TeamCheck = true,
+    Triggerbot = false,
+    TriggerAlwaysOn = false,
+    TriggerKey = Enum.KeyCode.Q,
+    TriggerDelay = 0,
+    ShowFov = false,
+    FovRadius = 100,
+    HeadSize = 1,
+    SilentAim = false,
+    NoRecoil = false,
+    Bhop = false,
+    Aimbot = false,
+    isAiming = false,
+    cTarget = nil,
+    AimbotPart = "Head",
+    AimOffset = 0,
+    Smoothness = 0.5,
+    BoxESP = false,
+    BoxCol = Color3.fromRGB(0, 255, 137),
+    SkeletonESP = false,
+    SkelCol = Color3.fromRGB(255, 255, 255),
+    AccurateHead = false,
+    AccCol = Color3.fromRGB(255, 0, 0),
+    NormalHead = false,
+    NormCol = Color3.fromRGB(0, 255, 0),
 }
 
-local connections = {}
-local isAiming, isTriggering, cTarget = false, false, nil
-local tbDelay = 0
 local rX, rY = 0, 0
-local eD, aD = {}, {}
-local BONES = {}
-
-local Chams = {}
-local WeaponChams = {}
-local espObjects = {}
-local espEnabled = false
-local teamCheckEnabled = true
-local MyTeam = nil
-
-local CharactersFolder = Workspace:FindFirstChild("Characters") or Workspace
-
+local tbDelay = 0
+local isTriggering = false
 local mouse = LocalPlayer:GetMouse()
+local eD = {}
+local aD = {}
+local BONES = {
+    {"Head", "HumanoidRootPart"},
+    {"HumanoidRootPart", "UpperTorso"},
+    {"UpperTorso", "LowerTorso"},
+    {"UpperTorso", "LeftUpperArm"},
+    {"LeftUpperArm", "LeftLowerArm"},
+    {"LeftLowerArm", "LeftHand"},
+    {"UpperTorso", "RightUpperArm"},
+    {"RightUpperArm", "RightLowerArm"},
+    {"RightLowerArm", "RightHand"},
+    {"LowerTorso", "LeftUpperLeg"},
+    {"LeftUpperLeg", "LeftLowerLeg"},
+    {"LeftLowerLeg", "LeftFoot"},
+    {"LowerTorso", "RightUpperLeg"},
+    {"RightUpperLeg", "RightLowerLeg"},
+    {"RightLowerLeg", "RightFoot"}
+}
 
-local fovGui = Instance.new("ScreenGui")
-fovGui.Name = "BloxStrikeFOV"
-fovGui.ResetOnSpawn = false
-fovGui.Parent = CoreGui
+-- ===================== VISUALS (ESP) TAB =====================
+local VisualsTab = Window:CreateTab({
+	Name = "Visuals",
+	Icon = "visibility",
+	ImageSource = "Material",
+	ShowTitle = true
+})
 
-local fovFrame = Instance.new("Frame")
-fovFrame.Size = UDim2.new(0, 200, 0, 200)
-fovFrame.AnchorPoint = Vector2.new(0.5, 0.5)
-fovFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-fovFrame.BackgroundTransparency = 1
-fovFrame.Visible = false
-fovFrame.Parent = fovGui
+VisualsTab:CreateToggle({
+	Name = "Box & Info ESP",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.ESPEnabled = Value
+        S.BoxESP = Value
+		if not S.ESPEnabled then
+			for player, _ in pairs(espObjects) do
+				if espObjects[player] then
+					pcall(function()
+						if espObjects[player].boxOutline then espObjects[player].boxOutline:Remove() end
+						if espObjects[player].boxFill then espObjects[player].boxFill:Remove() end
+						if espObjects[player].nameTag then espObjects[player].nameTag:Remove() end
+						if espObjects[player].distanceTag then espObjects[player].distanceTag:Remove() end
+						if espObjects[player].healthBarBg then espObjects[player].healthBarBg:Remove() end
+						if espObjects[player].healthBarFill then espObjects[player].healthBarFill:Remove() end
+					end)
+					espObjects[player] = nil
+				end
+			end
+		end
+	end
+}, "ESPToggle")
 
-local fovCorner = Instance.new("UICorner")
-fovCorner.CornerRadius = UDim.new(1, 0)
-fovCorner.Parent = fovFrame
+VisualsTab:CreateToggle({
+	Name = "Skeleton ESP",
+	CurrentValue = false,
+	Callback = function(Value)
+		S.SkeletonESP = Value
+	end
+}, "SkeletonESPToggle")
 
-local fovStroke = Instance.new("UIStroke")
-fovStroke.Color = Color3.fromRGB(255, 0, 0)
-fovStroke.Thickness = 1.5
-fovStroke.Parent = fovFrame
+VisualsTab:CreateToggle({
+	Name = "Player Chams",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.PlayerChamsEnabled = Value
+		if not S.PlayerChamsEnabled then
+			for p, h in pairs(chamsObjects) do
+				pcall(function() h:Destroy() end)
+				chamsObjects[p] = nil
+			end
+		end
+	end
+}, "PlayerChamsToggle")
 
-local function isValid(t)
-    if not t or not t.Character then return false end
-    if t == LocalPlayer then return false end
-    if LocalPlayer:IsFriendsWith(t.UserId) then return false end
-    local h = t.Character:FindFirstChildOfClass("Humanoid")
-    return h and h.Health > 0 and t.Character:FindFirstChild(S.AimbotPart) ~= nil
-end
+VisualsTab:CreateToggle({
+	Name = "Weapon Chams",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.WeaponChamsEnabled = Value
+		if not S.WeaponChamsEnabled then
+			for p, h in pairs(weaponChamsObjects) do
+				pcall(function() h:Destroy() end)
+				weaponChamsObjects[p] = nil
+			end
+		end
+	end
+}, "WeaponChamsToggle")
 
+VisualsTab:CreateToggle({
+	Name = "Health-Based Chams",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.HealthBasedChams = Value
+	end
+}, "HealthChamsToggle")
+
+VisualsTab:CreateToggle({
+	Name = "Team Check",
+	Description = nil,
+	CurrentValue = true,
+	Callback = function(Value)
+		S.TeamCheck = Value
+	end
+}, "TeamCheckToggle")
+
+-- ===================== COMBAT / LEGIT TAB =====================
+local CombatTab = Window:CreateTab({
+	Name = "Combat",
+	Icon = "gps_fixed",
+	ImageSource = "Material",
+	ShowTitle = true
+})
+
+CombatTab:CreateToggle({
+	Name = "Aimbot",
+	CurrentValue = false,
+	Callback = function(Value)
+		S.Aimbot = Value
+	end
+}, "AimbotToggle")
+
+CombatTab:CreateToggle({
+	Name = "Triggerbot",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.Triggerbot = Value
+	end
+}, "TriggerToggle")
+
+CombatTab:CreateToggle({
+	Name = "Triggerbot Mode (Always On)",
+	Description = "Off = Hold Key, On = Always On",
+	CurrentValue = false,
+	Callback = function(Value)
+		S.TriggerAlwaysOn = Value
+	end
+}, "TriggerModeToggle")
+
+CombatTab:CreateKeybind({
+	Name = "Trigger Key",
+	Description = nil,
+	CurrentKeybind = "Q",
+	HoldToInteract = false,
+	Callback = function(Key)
+		S.TriggerKey = Key
+	end,
+	ChangedCallback = function(NewKey)
+		S.TriggerKey = NewKey
+	end
+}, "TriggerKeybind")
+
+CombatTab:CreateSlider({
+	Name = "Delay (ms)",
+	Description = nil,
+	Range = {0, 1000},
+	Increment = 1,
+	CurrentValue = 0,
+	Callback = function(Value)
+		S.TriggerDelay = Value
+	end
+}, "TriggerDelaySlider")
+
+CombatTab:CreateToggle({
+	Name = "Show FOV Circle",
+	Description = nil,
+	CurrentValue = false,
+	Callback = function(Value)
+		S.ShowFov = Value
+	end
+}, "ShowFovToggle")
+
+CombatTab:CreateSlider({
+	Name = "FOV Radius",
+	Description = nil,
+	Range = {10, 500},
+	Increment = 1,
+	CurrentValue = 100,
+	Callback = function(Value)
+		S.FovRadius = Value
+	end
+}, "FovRadiusSlider")
+
+CombatTab:CreateSlider({
+	Name = "Head Size",
+	Description = nil,
+	Range = {1, 20},
+	Increment = 0.5,
+	CurrentValue = 1,
+	Callback = function(Value)
+		S.HeadSize = Value
+	end
+}, "HeadSizeSlider")
+
+CombatTab:CreateToggle({
+   Name = "Silent Aim",
+   CurrentValue = false,
+   Callback = function(Value)
+      S.SilentAim = Value
+   end
+}, "SilentAimToggle")
+
+CombatTab:CreateToggle({
+   Name = "No Recoil",
+   CurrentValue = false,
+   Callback = function(Value)
+      S.NoRecoil = Value
+   end
+}, "NoRecoilToggle")
+
+-- ===================== MOVEMENT TAB =====================
+local MovementTab = Window:CreateTab({
+	Name = "Movement",
+	Icon = "directions_run",
+	ImageSource = "Material",
+	ShowTitle = true
+})
+
+MovementTab:CreateToggle({
+   Name = "Auto BunnyHop",
+   CurrentValue = false,
+   Callback = function(Value)
+      S.Bhp = Value
+   end
+}, "BhopToggle")
+
+UserInputService.JumpRequest:Connect(function()
+   if S.Bhp then
+      local char = LocalPlayer.Character
+      if char then
+         local hum = char:FindFirstChildOfClass("Humanoid")
+         if hum then
+            hum.Jump = true
+         end
+      end
+   end
+end)
+
+-- FOV Circle Drawing (Kırmızı ve ayarlanabilir boyut)
+local fovDrawing = Drawing.new("Circle")
+fovDrawing.Visible = false
+fovDrawing.Thickness = 1
+fovDrawing.NumSides = 64
+fovDrawing.Color = Color3.fromRGB(255, 0, 0)
+fovDrawing.Filled = false
+
+UserInputService.InputBegan:Connect(function(input, gp)
+    if gp then return end
+    if input.KeyCode == S.TriggerKey then
+        isTriggering = true
+    end
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        S.isAiming = true
+    end
+end)
+
+UserInputService.InputEnded:Connect(function(input)
+    if input.KeyCode == S.TriggerKey then
+        isTriggering = false
+    end
+    if input.UserInputType == Enum.UserInputType.MouseButton2 then
+        S.isAiming = false
+        S.cTarget = nil
+    end
+end)
 
 local function UpdateMyTeam()
     if not LocalPlayer.Character then return end
@@ -188,6 +360,10 @@ task.spawn(function()
     end
 end)
 
+if LocalPlayer.Character then
+    task.spawn(UpdateMyTeam)
+end
+
 LocalPlayer.CharacterAdded:Connect(function()
     task.wait(0.8)
     UpdateMyTeam()
@@ -207,7 +383,7 @@ end
 
 local function isEnemy(plr)
     if plr == LocalPlayer then return false end
-    if not teamCheckEnabled then return true end
+    if not S.TeamCheck then return true end
     return not IsSameTeam(plr)
 end
 
@@ -219,42 +395,13 @@ local function CreateHighlight(fill, outline, trans)
     h.OutlineTransparency = 0
     h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
     h.Enabled = true
-    h.Parent = CoreGui
+    h.Parent = game:GetService("CoreGui")
     return h
 end
 
 local function GetHealthColor(health, maxhealth)
     local p = math.clamp(health / maxhealth, 0, 1)
     return Color3.fromRGB((1-p)*255, p*255, 50)
-end
-
-local function clearESP()
-    for player, data in pairs(espObjects) do
-        if data then
-            if data.boxOutline then data.boxOutline:Remove() end
-            if data.boxFill then data.boxFill:Remove() end
-            if data.nameTag then data.nameTag:Remove() end
-            if data.distanceTag then data.distanceTag:Remove() end
-            if data.healthBarBg then data.healthBarBg:Remove() end
-            if data.healthBarFill then data.healthBarFill:Remove() end
-        end
-    end
-    espObjects = {}
-end
-
-local function removeESP(player)
-    if espObjects[player] then
-        local data = espObjects[player]
-        if data.boxOutline then data.boxOutline:Remove() end
-        if data.boxFill then data.boxFill:Remove() end
-        if data.nameTag then data.nameTag:Remove() end
-        if data.distanceTag then data.distanceTag:Remove() end
-        if data.healthBarBg then data.healthBarBg:Remove() end
-        if data.healthBarFill then data.healthBarFill:Remove() end
-        espObjects[player] = nil
-    end
-    if Chams[player] then Chams[player]:Destroy() Chams[player] = nil end
-    if WeaponChams[player] then WeaponChams[player]:Destroy() WeaponChams[player] = nil end
 end
 
 local function createESPForPlayer(player)
@@ -269,23 +416,23 @@ local function createESPForPlayer(player)
 
     local boxFill = Drawing.new("Square")
     boxFill.Visible = false
-    boxFill.Color = Color3.new(1, 1, 1)
+    boxFill.Color = Color3.new(1, 0, 0)
     boxFill.Thickness = 1
     boxFill.Filled = false
 
     local nameTag = Drawing.new("Text")
     nameTag.Visible = false
-    nameTag.Color = Color3.new(1, 1, 1)
-    nameTag.Size = 13
     nameTag.Center = true
     nameTag.Outline = true
+    nameTag.Color = Color3.new(1, 1, 1)
+    nameTag.Size = 14
 
     local distanceTag = Drawing.new("Text")
     distanceTag.Visible = false
-    distanceTag.Color = Color3.new(0.8, 0.8, 0.8)
-    distanceTag.Size = 12
     distanceTag.Center = true
     distanceTag.Outline = true
+    distanceTag.Color = Color3.new(1, 1, 1)
+    distanceTag.Size = 13
 
     local healthBarBg = Drawing.new("Square")
     healthBarBg.Visible = false
@@ -306,424 +453,378 @@ local function createESPForPlayer(player)
         healthBarBg = healthBarBg,
         healthBarFill = healthBarFill
     }
+
+    local lines = {}
+    for i = 1, 4 do
+        local l = Drawing.new("Line")
+        l.Visible = false
+        table.insert(lines, l)
+    end
+    eD[player] = {L = lines}
+
+    local skelLines = {}
+    for i = 1, #BONES do
+        local l = Drawing.new("Line")
+        l.Visible = false
+        table.insert(skelLines, l)
+    end
+    aD[player] = {L = skelLines}
 end
 
-
-table.insert(connections, UserInputService.InputBegan:Connect(function(i, gp)
-    local k = i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode or i.UserInputType
-    if k == S.AimKey and (not gp or k ~= i.KeyCode) then 
-        isAiming = true 
-        triggerRedFlash()
+local function removeESP(player)
+    local data = espObjects[player]
+    if data then
+        pcall(function()
+            if data.boxOutline then data.boxOutline:Remove() end
+            if data.boxFill then data.boxFill:Remove() end
+            if data.nameTag then data.nameTag:Remove() end
+            if data.distanceTag then data.distanceTag:Remove() end
+            if data.healthBarBg then data.healthBarBg:Remove() end
+            if data.healthBarFill then data.healthBarFill:Remove() end
+        end)
+        espObjects[player] = nil
     end
-    if k == S.TriggerKey and (not gp or k ~= i.KeyCode) then 
-        isTriggering = true 
+    if eD[player] then
+        pcall(function()
+            for _, l in pairs(eD[player].L) do l:Remove() end
+        end)
+        eD[player] = nil
     end
-    if not gp and i.KeyCode == Enum.KeyCode.K then
-        espEnabled = not espEnabled
-        if not espEnabled then clearESP() end
+    if aD[player] then
+        pcall(function()
+            for _, l in pairs(aD[player].L) do l:Remove() end
+        end)
+        aD[player] = nil
     end
-end))
+end
 
-table.insert(connections, UserInputService.InputEnded:Connect(function(i)
-    local k = i.UserInputType == Enum.UserInputType.Keyboard and i.KeyCode or i.UserInputType
-    if k == S.AimKey then isAiming = false; cTarget = nil end
-    if k == S.TriggerKey then isTriggering = false end
-end))
+local function isValid(plr)
+    if not plr or plr == LocalPlayer then return false end
+    local char = plr.Character
+    if not char then return false end
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hum or hum.Health <= 0 then return false end
+    if not isEnemy(plr) then return false end
+    return true
+end
 
-pcall(function() RunService:BindToRenderStep("DXAimbotLock", 205, function(deltaTime)
-    local Cam = Workspace.CurrentCamera; if not Cam then return end
+RunService.RenderStepped:Connect(function(deltaTime)
+    local Cam = workspace.CurrentCamera
+    if not Cam then return end
 
+    -- FOV circle update
     pcall(function()
-        fovFrame.Position = UDim2.new(0.5, 0, 0.5, 0)
-        fovFrame.Size = UDim2.new(0, S.FovRadius * 2, 0, S.FovRadius * 2)
-        fovFrame.Visible = S.ShowFov
-        fovStroke.Color = Color3.fromRGB(255, 0, 0)
+        fovDrawing.Visible = S.ShowFov
+        fovDrawing.Radius = S.FovRadius
+        fovDrawing.Position = UserInputService:GetMouseLocation()
     end)
 
-    pcall(function()
-        if S.HeadSize and S.HeadSize > 1 then
+    -- Head Size Logic
+    for _, p in pairs(Players:GetPlayers()) do
+        if p ~= LocalPlayer and p.Character then
+            local head = p.Character:FindFirstChild("Head")
+            if head then
+                if S.HeadSize > 1 then
+                    head.Size = Vector3.new(S.HeadSize, S.HeadSize, S.HeadSize)
+                    head.Transparency = 0.5
+                    head.CanCollide = false
+                else
+                    head.Size = Vector3.new(2, 1, 1)
+                    head.Transparency = 0
+                    head.CanCollide = true
+                end
+            end
+        end
+    end
+
+    -- No Recoil Logic
+    if S.NoRecoil then
+        -- Recoil suppression logic loop
+    end
+
+    -- Triggerbot
+    if S.Triggerbot and (S.TriggerAlwaysOn or isTriggering) and tick() - tbDelay > (S.TriggerDelay / 1000) then
+        local target = mouse.Target
+        if target then
+            local char = target.Parent
+            if char and not char:FindFirstChildOfClass("Humanoid") then char = char.Parent end
+            if char and char:IsA("Model") and char:FindFirstChildOfClass("Humanoid") then
+                local p = Players:GetPlayerFromCharacter(char)
+                if p and p ~= LocalPlayer and isValid(p) then
+                    if mouse1click then mouse1click(); tbDelay = tick() end
+                end
+            end
+        end
+    end
+
+    -- Aimbot
+    if S.Aimbot and S.isAiming then
+        if not isValid(S.cTarget) then
+            local sDist, cCen = S.FovRadius, Cam.ViewportSize / 2
             for _, p in pairs(Players:GetPlayers()) do
-                if p ~= LocalPlayer and isEnemy(p) and p.Character then
-                    local head = p.Character:FindFirstChild("Head")
-                    local hum = p.Character:FindFirstChildOfClass("Humanoid")
-                    if head and hum and hum.Health > 0 then
-                        head.Size = Vector3.new(S.HeadSize, S.HeadSize, S.HeadSize)
-                        head.CanCollide = false
-                        head.Transparency = 0.5
+                if p ~= LocalPlayer and isValid(p) then
+                    local pS, oS = Cam:WorldToViewportPoint(p.Character[S.AimbotPart].Position)
+                    if oS then
+                        local dist = (Vector2.new(pS.X, pS.Y) - cCen).Magnitude
+                        if dist <= sDist then
+                            S.cTarget, sDist = p, dist
+                        end
                     end
                 end
             end
         end
-    end)
+        if S.cTarget and S.cTarget.Character and S.cTarget.Character:FindFirstChild(S.AimbotPart) then
+            local tPos = S.cTarget.Character[S.AimbotPart].Position + Vector3.new(0, S.AimOffset, 0)
+            local sPos, onScreen = Cam:WorldToViewportPoint(tPos)
+            if onScreen then
+                if mousemoverel then
+                    local sm = (1.1 - S.Smoothness) * 20 * deltaTime
+                    local rawX = (sPos.X - Cam.ViewportSize.X / 2) * sm + rX
+                    local rawY = (sPos.Y - Cam.ViewportSize.Y / 2) * sm + rY
+                    local mX, mY = math.floor(rawX), math.floor(rawY)
+                    rX, rY = rawX - mX, rawY - mY
+                    if mX ~= 0 or mY ~= 0 then mousemoverel(mX, mY) end
+                else
+                    Cam.CFrame = Cam.CFrame:Lerp(CFrame.lookAt(Cam.CFrame.Position, tPos), (1.1 - S.Smoothness) * 10 * deltaTime)
+                end
+            end
+        end
+    else
+        rX, rY = 0, 0
+    end
 
-    -- Chams Update
+    -- Box & Info ESP Logic
+    if not S.ESPEnabled then
+        for _, data in pairs(espObjects) do
+            if data then
+                pcall(function()
+                    data.boxOutline.Visible = false
+                    data.boxFill.Visible = false
+                    data.nameTag.Visible = false
+                    data.distanceTag.Visible = false
+                    data.healthBarBg.Visible = false
+                    data.healthBarFill.Visible = false
+                end)
+            end
+        end
+    else
+        local toRemove = {}
+
+        for player, data in pairs(espObjects) do
+            if not player or not player.Parent or not player.Character then
+                table.insert(toRemove, player)
+            else
+                local char = player.Character
+                local root = char:FindFirstChild("HumanoidRootPart")
+                local head = char:FindFirstChild("Head")
+                local humanoid = char:FindFirstChildOfClass("Humanoid")
+
+                if not root or not head or not humanoid or humanoid.Health <= 0 or not isEnemy(player) then
+                    pcall(function()
+                        data.boxOutline.Visible = false
+                        data.boxFill.Visible = false
+                        data.nameTag.Visible = false
+                        data.distanceTag.Visible = false
+                        data.healthBarBg.Visible = false
+                        data.healthBarFill.Visible = false
+                    end)
+                else
+                    local rootPos, rootOnScreen = Cam:WorldToScreenPoint(root.Position)
+                    local headPos, headOnScreen = Cam:WorldToScreenPoint(head.Position + Vector3.new(0, 0.5, 0))
+
+                    if not rootOnScreen and not headOnScreen then
+                        pcall(function()
+                            data.boxOutline.Visible = false
+                            data.boxFill.Visible = false
+                            data.nameTag.Visible = false
+                            data.distanceTag.Visible = false
+                            data.healthBarBg.Visible = false
+                            data.healthBarFill.Visible = false
+                        end)
+                    else
+                        local height = math.abs(headPos.Y - rootPos.Y)
+                        local width = height / 2
+                        local boxX = rootPos.X - width / 2
+                        local boxY = rootPos.Y
+
+                        pcall(function()
+                            data.boxOutline.Visible = true
+                            data.boxOutline.Position = Vector2.new(boxX, boxY)
+                            data.boxOutline.Size = Vector2.new(width, height)
+
+                            data.boxFill.Visible = true
+                            data.boxFill.Position = Vector2.new(boxX, boxY)
+                            data.boxFill.Size = Vector2.new(width, height)
+
+                            data.nameTag.Visible = true
+                            data.nameTag.Text = player.Name
+                            data.nameTag.Position = Vector2.new(rootPos.X, boxY - 18)
+
+                            local dist = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
+                                and (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
+                                or 0
+                            data.distanceTag.Visible = true
+                            data.distanceTag.Text = string.format("%.0f m", dist)
+                            data.distanceTag.Position = Vector2.new(rootPos.X, boxY + height + 2)
+
+                            local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
+                            local barWidth = 2
+                            local barHeight = height
+                            local barX = boxX - barWidth - 4
+                            local barY = boxY
+
+                            data.healthBarBg.Visible = true
+                            data.healthBarBg.Position = Vector2.new(barX, barY)
+                            data.healthBarBg.Size = Vector2.new(barWidth, barHeight)
+
+                            data.healthBarFill.Visible = true
+                            data.healthBarFill.Position = Vector2.new(barX, barY + barHeight * (1 - healthPercent))
+                            data.healthBarFill.Size = Vector2.new(barWidth, barHeight * healthPercent)
+                            data.healthBarFill.Color = Color3.new(1 - healthPercent, healthPercent, 0)
+                        end)
+                    end
+                end
+            end
+        end
+
+        for _, uid in ipairs(toRemove) do
+            removeESP(uid)
+        end
+    end
+
+    -- Render Step ESP / Skeleton Extra Loop
+    for p, d in pairs(eD) do
+        local ch = p.Character
+        local hrp = ch and ch:FindFirstChild("HumanoidRootPart")
+        if hrp and isEnemy(p) then
+            local hd = ch:FindFirstChild("Head") or hrp
+            local tP, tO = Cam:WorldToViewportPoint(hd.Position + Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2 + 0.5, 0))
+            local bP, bO = Cam:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
+            if S.BoxESP and tO and bO then
+                local w = math.abs(tP.Y - bP.Y) * 0.65
+                local hV = Cam:WorldToViewportPoint(hrp.Position)
+                local w2 = w / 2
+                local xs = {hV.X - w2, hV.X + w2, hV.X + w2, hV.X - w2}
+                local ys = {tP.Y, tP.Y, bP.Y, bP.Y}
+                for i = 1, 4 do
+                    if d.L[i] then
+                        pcall(function()
+                            d.L[i].Color = S.BoxCol
+                            d.L[i].From = Vector2.new(xs[i], ys[i])
+                            d.L[i].To = Vector2.new(xs[(i % 4) + 1], ys[(i % 4) + 1])
+                            d.L[i].Visible = true
+                        end)
+                    end
+                end
+            else
+                for _, l in pairs(d.L) do
+                    if l then pcall(function() l.Visible = false end) end
+                end
+            end
+
+            local sD = aD[p]
+            if sD then
+                if S.SkeletonESP then
+                    for i, bn in ipairs(BONES) do
+                        if sD.L[i] then
+                            local p1, p2 = ch:FindFirstChild(bn[1]), ch:FindFirstChild(bn[2])
+                            if p1 and p2 then
+                                local sp1, o1 = Cam:WorldToViewportPoint(p1.Position - (p1 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
+                                local sp2, o2 = Cam:WorldToViewportPoint(p2.Position - (p2 == hd and Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2, 0) or Vector3.new()))
+                                if o1 and o2 then
+                                    pcall(function()
+                                        sD.L[i].Color = S.SkelCol
+                                        sD.L[i].From = Vector2.new(sp1.X, sp1.Y)
+                                        sD.L[i].To = Vector2.new(sp2.X, sp2.Y)
+                                        sD.L[i].Visible = true
+                                    end)
+                                else
+                                    pcall(function() sD.L[i].Visible = false end)
+                                end
+                            else
+                                pcall(function() sD.L[i].Visible = false end)
+                            end
+                        end
+                    end
+                else
+                    for _, l in pairs(sD.L) do
+                        if l then pcall(function() l.Visible = false end) end
+                    end
+                end
+            end
+        else
+            for _, l in pairs(d.L) do
+                if l then pcall(function() l.Visible = false end) end
+            end
+            if aD[p] then
+                for _, l in pairs(aD[p].L) do
+                    if l then pcall(function() l.Visible = false end) end
+                end
+            end
+        end
+    end
+
+    -- Chams Logic
     for _, plr in ipairs(Players:GetPlayers()) do
         if plr ~= LocalPlayer then
             if IsSameTeam(plr) then
-                if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
-                if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                if chamsObjects[plr] then chamsObjects[plr]:Destroy() chamsObjects[plr] = nil end
+                if weaponChamsObjects[plr] then weaponChamsObjects[plr]:Destroy() weaponChamsObjects[plr] = nil end
             else
                 local char = plr.Character
-                if char then
-                    local hum = char:FindFirstChildOfClass("Humanoid")
-                    if hum and hum.Health > 0 then
-                        if S.PlayerChamsEnabled then
-                            if not Chams[plr] then
-                                Chams[plr] = CreateHighlight(S.PlayerFillColor, S.PlayerOutlineColor, S.PlayerFillTransparency)
-                            end
-                            if S.HealthBasedChams then
-                                Chams[plr].FillColor = GetHealthColor(hum.Health, hum.MaxHealth)
-                            else
-                                Chams[plr].FillColor = S.PlayerFillColor
-                            end
-                            Chams[plr].Adornee = char
-                        else
-                            if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
-                        end
+                local hum = char and char:FindFirstChildOfClass("Humanoid")
 
-                        if S.WeaponChamsEnabled then
-                            local debris = Workspace:FindFirstChild("Debris")
-                            local weapon = debris and debris:FindFirstChild(plr.Name .. "_Weapon")
-                            if weapon then
-                                if not WeaponChams[plr] then
-                                    WeaponChams[plr] = CreateHighlight(S.WeaponFillColor, S.WeaponOutlineColor, S.WeaponFillTransparency)
-                                end
-                                WeaponChams[plr].Adornee = weapon
-                            end
-                        else
-                            if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
-                        end
+                if S.PlayerChamsEnabled and char and hum and hum.Health > 0 then
+                    if not chamsObjects[plr] then
+                        chamsObjects[plr] = CreateHighlight(Color3.fromRGB(255, 0, 0), Color3.fromRGB(255, 255, 255), 0.5)
+                    end
+                    if S.HealthBasedChams then
+                        chamsObjects[plr].FillColor = GetHealthColor(hum.Health, hum.MaxHealth)
                     else
-                        if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
-                        if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                        chamsObjects[plr].FillColor = Color3.fromRGB(255, 0, 0)
+                    end
+                    chamsObjects[plr].Adornee = char
+                else
+                    if chamsObjects[plr] then chamsObjects[plr]:Destroy() chamsObjects[plr] = nil end
+                end
+
+                if S.WeaponChamsEnabled and char then
+                    local debris = Workspace:FindFirstChild("Debris")
+                    local weapon = debris and debris:FindFirstChild(plr.Name .. "_Weapon")
+                    if weapon then
+                        if not weaponChamsObjects[plr] then
+                            weaponChamsObjects[plr] = CreateHighlight(Color3.fromRGB(0, 255, 0), Color3.fromRGB(255, 255, 255), 0.5)
+                        end
+                        weaponChamsObjects[plr].Adornee = weapon
+                    else
+                        if weaponChamsObjects[plr] then weaponChamsObjects[plr]:Destroy() weaponChamsObjects[plr] = nil end
                     end
                 else
-                    if Chams[plr] then Chams[plr]:Destroy() Chams[plr] = nil end
-                    if WeaponChams[plr] then WeaponChams[plr]:Destroy() WeaponChams[plr] = nil end
+                    if weaponChamsObjects[plr] then weaponChamsObjects[plr]:Destroy() weaponChamsObjects[plr] = nil end
                 end
             end
         end
-    end
-
-    -- Box & Tag ESP Loop
-    if espEnabled then
-        for _, player in ipairs(Players:GetPlayers()) do
-            if player ~= LocalPlayer then
-                if isEnemy(player) then
-                    local char = player.Character
-                    local root = char and char:FindFirstChild("HumanoidRootPart")
-                    local head = char and char:FindFirstChild("Head")
-                    local humanoid = char and char:FindFirstChildOfClass("Humanoid")
-
-                    if root and head and humanoid and humanoid.Health > 0 then
-                        if not espObjects[player] then
-                            createESPForPlayer(player)
-                        end
-
-                        local data = espObjects[player]
-                        if data then
-                            local rootPos, rootOnScreen = Cam:WorldToViewportPoint(root.Position)
-                            local headPos, headOnScreen = Cam:WorldToViewportPoint(head.Position + Vector3.new(0, 0.5, 0))
-
-                            if not rootOnScreen and not headOnScreen then
-                                data.boxOutline.Visible = false
-                                data.boxFill.Visible = false
-                                data.nameTag.Visible = false
-                                data.distanceTag.Visible = false
-                                data.healthBarBg.Visible = false
-                                data.healthBarFill.Visible = false
-                            else
-                                local height = math.abs(headPos.Y - rootPos.Y)
-                                local width = height / 2
-                                local boxX = rootPos.X - width / 2
-                                local boxY = rootPos.Y
-
-                                data.boxOutline.Visible = true
-                                data.boxOutline.Position = Vector2.new(boxX, boxY)
-                                data.boxOutline.Size = Vector2.new(width, height)
-
-                                data.boxFill.Visible = true
-                                data.boxFill.Position = Vector2.new(boxX, boxY)
-                                data.boxFill.Size = Vector2.new(width, height)
-
-                                data.nameTag.Visible = true
-                                data.nameTag.Text = player.Name
-                                data.nameTag.Position = Vector2.new(rootPos.X, boxY - 14)
-
-                                local dist = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
-                                    and (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
-                                    or 0
-                                data.distanceTag.Visible = true
-                                data.distanceTag.Text = string.format("%.0f m", dist)
-                                data.distanceTag.Position = Vector2.new(rootPos.X, boxY + height + 2)
-
-                                local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
-                                local barWidth = 2
-                                local barHeight = height
-                                local barX = boxX - barWidth - 2
-                                local barY = boxY
-
-                                data.healthBarBg.Visible = true
-                                data.healthBarBg.Position = Vector2.new(barX, barY)
-                                data.healthBarBg.Size = Vector2.new(barWidth, barHeight)
-
-                                data.healthBarFill.Visible = true
-                                data.healthBarFill.Position = Vector2.new(barX, barY + barHeight * (1 - healthPercent))
-                                data.healthBarFill.Size = Vector2.new(barWidth, barHeight * barHeight * (healthPercent / barHeight)) -- safe size calculation
-                                data.healthBarFill.Size = Vector2.new(barWidth, barHeight * healthPercent)
-                                data.healthBarFill.Color = Color3.new(1 - healthPercent, healthPercent, 0)
-                            end
-                        end
-                    else
-                        removeESP(player)
-                    end
-                else
-                    removeESP(player)
-                end
-            end
-        end
-    end
-
-    if S.Triggerbot and (S.TriggerAlwaysOn or isTriggering) and tick()-tbDelay>(S.TriggerDelay/1000) then
-        local target=mouse.Target
-        if target then
-            local char=target.Parent
-            if char and not char:FindFirstChildOfClass("Humanoid") then char=char.Parent end
-            if char and char:IsA("Model") and char:FindFirstChildOfClass("Humanoid") then
-                local p=Players:GetPlayerFromCharacter(char)
-                if p and p~=LocalPlayer and isValid(p) then
-                    if mouse1click then mouse1click(); tbDelay=tick() end
-                end
-            end
-        end
-    end
-
-    if S.Aimbot and isAiming then
-        if not isValid(cTarget) then
-            local sDist,cCen=S.FovRadius,Cam.ViewportSize/2
-            for _,p in pairs(Players:GetPlayers()) do
-                if p~=LocalPlayer and isValid(p) then
-                    local pS,oS=Cam:WorldToViewportPoint(p.Character[S.AimbotPart].Position)
-                    if oS then local dist=(Vector2.new(pS.X,pS.Y)-cCen).Magnitude; if dist<=sDist then cTarget,sDist=p,dist end end
-                end
-            end
-        end
-        if cTarget then
-            local tPos=cTarget.Character[S.AimbotPart].Position+Vector3.new(0,S.AimOffset,0)
-            local sPos,onScreen=Cam:WorldToViewportPoint(tPos)
-            if onScreen then
-                if mousemoverel then
-                    local sm=(1.1-S.Smoothness)*20*deltaTime
-                    local rawX=(sPos.X-Cam.ViewportSize.X/2)*sm+rX; local rawY=(sPos.Y-Cam.ViewportSize.Y/2)*sm+rY
-                    local mX,mY=math.floor(rawX),math.floor(rawY); rX,rY=rawX-mX,rawY-mY
-                    if mX~=0 or mY~=0 then mousemoverel(mX,mY) end
-                else Cam.CFrame=Cam.CFrame:Lerp(CFrame.lookAt(Cam.CFrame.Position,tPos),(1.1-S.Smoothness)*10*deltaTime) end
-            end
-        end
-    else rX,rY=0,0 end
-end) end)
-
-
-LocalPlayer.Chatted:Connect(function(msg)
-    local cmd = string.lower(msg)
-    if cmd == "/espon" then
-        espEnabled = true
-    elseif cmd == "/espoff" then
-        espEnabled = false
-        clearESP()
-    elseif cmd == "/teamcheck on" then
-        teamCheckEnabled = true
-        clearESP()
-    elseif cmd == "/teamcheck off" then
-        teamCheckEnabled = false
-        clearESP()
     end
 end)
 
 Players.PlayerAdded:Connect(function(player)
+    createESPForPlayer(player)
     player.CharacterAdded:Connect(function()
         task.wait(0.5)
-        if espEnabled and isEnemy(player) then
+        if not espObjects[player] then
             createESPForPlayer(player)
         end
     end)
 end)
 
-Players.PlayerRemoving:Connect(removeESP)
+Players.PlayerRemoving:Connect(function(player)
+    removeESP(player)
+    if chamsObjects[player] then chamsObjects[player]:Destroy() chamsObjects[player] = nil end
+    if weaponChamsObjects[player] then weaponChamsObjects[player]:Destroy() weaponChamsObjects[player] = nil end
+end)
 
-
-CombatTab:CreateToggle({
-   Name = "Silent Aim",
-   CurrentValue = false,
-   Flag = "SilentAimFlag",
-   Callback = function(Value)
-      _G.SilentAim = Value
-      if Value then
-          pcall(function()
-              Luna:Notification({
-                  Title = "Xeditio",
-                  Content = "Silent Aim Activated!",
-                  Duration = 2
-              })
-          end)
-      end
-   end,
-})
-
-CombatTab:CreateToggle({
-   Name = "No Recoil",
-   CurrentValue = false,
-   Flag = "NoRecoilFlag",
-   Callback = function(Value)
-      _G.NoRecoil = Value
-   end,
-})
-
-CombatTab:CreateToggle({
-   Name = "Triggerbot",
-   CurrentValue = false,
-   Flag = "TriggerbotFlag",
-   Callback = function(Value)
-      S.Triggerbot = Value
-   end,
-})
-
-CombatTab:CreateButton({
-   Name = "Triggerbot Mode: Always On / Hold",
-   Callback = function()
-      S.TriggerAlwaysOn = not S.TriggerAlwaysOn
-      pcall(function()
-          Luna:Notification({
-              Title = "Triggerbot Mode",
-              Content = "Current Mode: " .. (S.TriggerAlwaysOn and "Always On" or "Hold Key"),
-              Duration = 2
-          })
-      end)
-   end,
-})
-
-CombatTab:CreateKeybind({
-   Name = "Trigger Key",
-   CurrentKeybind = "MouseButton1",
-   HoldToInteract = false,
-   Flag = "TriggerKeyFlag",
-   Callback = function(Keybind)
-      S.TriggerKey = Keybind
-   end,
-})
-
-CombatTab:CreateSlider({
-   Name = "Trigger Delay (ms)",
-   Range = {0, 1000},
-   Increment = 10,
-   CurrentValue = 0,
-   Flag = "TriggerDelayFlag",
-   Callback = function(Value)
-      S.TriggerDelay = Value
-   end,
-})
-
-CombatTab:CreateToggle({
-   Name = "Show FOV Circle",
-   CurrentValue = false,
-   Flag = "ShowFovFlag",
-   Callback = function(Value)
-      S.ShowFov = Value
-   end,
-})
-
-CombatTab:CreateSlider({
-   Name = "FOV Radius",
-   Range = {20, 500},
-   Increment = 5,
-   CurrentValue = 100,
-   Flag = "FovRadiusFlag",
-   Callback = function(Value)
-      S.FovRadius = Value
-   end,
-})
-
-CombatTab:CreateSlider({
-   Name = "Head Size",
-   Range = {1, 10},
-   Increment = 0.5,
-   CurrentValue = 1,
-   Flag = "HeadSizeFlag",
-   Callback = function(Value)
-      S.HeadSize = Value
-      pcall(function()
-          Luna:Notification({
-              Title = "Head Size",
-              Content = "Size set to " .. tostring(Value),
-              Duration = 1.5
-          })
-      end)
-   end,
-})
-
-
-VisualsTab:CreateToggle({
-   Name = "Box & Info ESP (Press K)",
-   CurrentValue = false,
-   Flag = "EspToggleFlag",
-   Callback = function(Value)
-      espEnabled = Value
-      if not espEnabled then clearESP() end
-   end,
-})
-
-VisualsTab:CreateToggle({
-   Name = "Player Chams",
-   CurrentValue = false,
-   Flag = "PlayerChamsFlag",
-   Callback = function(Value)
-      S.PlayerChamsEnabled = Value
-   end,
-})
-
-VisualsTab:CreateToggle({
-   Name = "Weapon Chams",
-   CurrentValue = false,
-   Flag = "WeaponChamsFlag",
-   Callback = function(Value)
-      S.WeaponChamsEnabled = Value
-   end,
-})
-
-VisualsTab:CreateToggle({
-   Name = "Health-Based Chams",
-   CurrentValue = false,
-   Flag = "HealthChamsFlag",
-   Callback = function(Value)
-      S.HealthBasedChams = Value
-   end,
-})
-
-VisualsTab:CreateToggle({
-   Name = "Team Check",
-   CurrentValue = true,
-   Flag = "TeamCheckFlag",
-   Callback = function(Value)
-      S.TeamCheck = Value
-      teamCheckEnabled = Value
-      clearESP()
-   end,
-})
-
-
-MovementTab:CreateToggle({
-   Name = "Auto BunnyHop",
-   CurrentValue = false,
-   Flag = "BhopFlag",
-   Callback = function(Value)
-      _G.Bhop = Value
-      UserInputService.JumpRequest:Connect(function()
-         if _G.Bhop then
-            local char = LocalPlayer.Character
-            if char and char:FindFirstChildOfClass("Humanoid") then
-               char:FindFirstChildOfClass("Humanoid").Jump = true
-            end
-         end
-      end)
-   end,
-})
+for _, player in ipairs(Players:GetPlayers()) do
+    if player ~= LocalPlayer then
+        createESPForPlayer(player)
+    end
+end
