@@ -1,7 +1,7 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-	Name = "Torrycxn&Clooter",
+	Name = "Torrycxn&Clooter HUB",
 	Subtitle = nil,
 	LogoID = nil,
 	LoadingEnabled = true,
@@ -30,12 +30,12 @@ local Camera = Workspace.CurrentCamera
 local CharactersFolder = Workspace:FindFirstChild("Characters") or Workspace
 
 local MyTeam = nil
-local espObjects = {}
 local chamsObjects = {}
 local weaponChamsObjects = {}
+local wallhackObjects = {}
+local wallhackEnabled = false
 
 local S = {
-    ESPEnabled = false,
     PlayerChamsEnabled = false,
     WeaponChamsEnabled = false,
     HealthBasedChams = false,
@@ -53,14 +53,11 @@ local S = {
     Aimbot = false,
     ToggleKey = Enum.KeyCode.E,
     TargetPart = "Head",
-    BoxESP = false,
-    BoxCol = Color3.fromRGB(0, 255, 137),
 }
 
 local tbDelay = 0
 local isTriggering = false
 local mouse = LocalPlayer:GetMouse()
-local eD = {}
 
 -- ===================== VISUALS (ESP) TAB =====================
 local VisualsTab = Window:CreateTab({
@@ -69,31 +66,6 @@ local VisualsTab = Window:CreateTab({
 	ImageSource = "Material",
 	ShowTitle = true
 })
-
-VisualsTab:CreateToggle({
-	Name = "Box & Info ESP",
-	Description = nil,
-	CurrentValue = false,
-	Callback = function(Value)
-		S.ESPEnabled = Value
-        S.BoxESP = Value
-		if not S.ESPEnabled then
-			for player, _ in pairs(espObjects) do
-				if espObjects[player] then
-					pcall(function()
-						if espObjects[player].boxOutline then espObjects[player].boxOutline:Remove() end
-						if espObjects[player].boxFill then espObjects[player].boxFill:Remove() end
-						if espObjects[player].nameTag then espObjects[player].nameTag:Remove() end
-						if espObjects[player].distanceTag then espObjects[player].distanceTag:Remove() end
-						if espObjects[player].healthBarBg then espObjects[player].healthBarBg:Remove() end
-						if espObjects[player].healthBarFill then espObjects[player].healthBarFill:Remove() end
-					end)
-					espObjects[player] = nil
-				end
-			end
-		end
-	end
-}, "ESPToggle")
 
 VisualsTab:CreateToggle({
 	Name = "Player Chams",
@@ -224,7 +196,7 @@ CombatTab:CreateSlider({
 CombatTab:CreateSlider({
 	Name = "Head Size",
 	Description = nil,
-	Range = {1, 3},
+	Range = {1, 20},
 	Increment = 0.5,
 	CurrentValue = 1,
 	Callback = function(Value)
@@ -287,10 +259,21 @@ UserInputService.InputBegan:Connect(function(i, gp)
     if gp then return end
     if i.KeyCode == S.ToggleKey then
         S.Aimbot = not S.Aimbot
-        print("Aimbot:", S.Aimbot)
     end
     if i.KeyCode == S.TriggerKey then
         isTriggering = true
+    end
+    if i.KeyCode == Enum.KeyCode.K then
+        wallhackEnabled = not wallhackEnabled
+        print(wallhackEnabled and "✅ FULL WALLHACK ENABLED" or "❌ WALLHACK DISABLED")
+        if not wallhackEnabled then
+            for player, _ in pairs(wallhackObjects) do
+                if wallhackObjects[player] then
+                    if wallhackObjects[player].Highlight then wallhackObjects[player].Highlight:Destroy() end
+                    wallhackObjects[player] = nil
+                end
+            end
+        end
     end
 end)
 
@@ -348,12 +331,48 @@ local function isEnemy(plr)
     return not IsSameTeam(plr)
 end
 
-local function CreateHighlight(fill, outline, trans)
+local function getTeamColor(player)
+    if not player.Team then 
+        return Color3.fromRGB(255, 220, 60) 
+    end
+    return player.Team.TeamColor.Color
+end
+
+local function createWallhackESP(player)
+    if wallhackObjects[player] then return end
+    if not isEnemy(player) then return end
+
+    local character = player.Character
+    if not character then return end
+
+    local highlight = Instance.new("Highlight")
+    highlight.Name = "WallHack"
+    highlight.FillColor = getTeamColor(player)
+    highlight.OutlineColor = Color3.fromRGB(0, 0, 0)
+    highlight.FillTransparency = 0.35
+    highlight.OutlineTransparency = 1 -- Çerçeve çizgisi tamamen kapatıldı
+    highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+    highlight.Adornee = character
+    highlight.Parent = character
+
+    wallhackObjects[player] = {
+        Highlight = highlight
+    }
+end
+
+local function removeWallhackESP(player)
+    if wallhackObjects[player] then
+        if wallhackObjects[player].Highlight then wallhackObjects[player].Highlight:Destroy() end
+        wallhackObjects[player] = nil
+    end
+end
+
+local function CreateHighlight(fill, trans)
     local h = Instance.new("Highlight")
     h.FillColor = fill
-    h.OutlineColor = outline
+    h.OutlineColor = Color3.fromRGB(0, 0, 0)
     h.FillTransparency = trans
-    h.OutlineTransparency = 0
+    h.OutlineTransparency = 1 -- Çerçeve çizgisi tamamen kapatıldı
     h.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
     h.Enabled = true
     h.Parent = game:GetService("CoreGui")
@@ -363,86 +382,6 @@ end
 local function GetHealthColor(health, maxhealth)
     local p = math.clamp(health / maxhealth, 0, 1)
     return Color3.fromRGB((1-p)*255, p*255, 50)
-end
-
-local function createESPForPlayer(player)
-    if player == LocalPlayer then return end
-    if espObjects[player] then return end
-
-    local boxOutline = Drawing.new("Square")
-    boxOutline.Visible = false
-    boxOutline.Color = Color3.new(0, 0, 0)
-    boxOutline.Thickness = 3
-    boxOutline.Filled = false
-
-    local boxFill = Drawing.new("Square")
-    boxFill.Visible = false
-    boxFill.Color = Color3.new(1, 0, 0)
-    boxFill.Thickness = 1
-    boxFill.Filled = false
-
-    local nameTag = Drawing.new("Text")
-    nameTag.Visible = false
-    nameTag.Center = true
-    nameTag.Outline = true
-    nameTag.Color = Color3.new(1, 1, 1)
-    nameTag.Size = 14
-
-    local distanceTag = Drawing.new("Text")
-    distanceTag.Visible = false
-    distanceTag.Center = true
-    distanceTag.Outline = true
-    distanceTag.Color = Color3.new(1, 1, 1)
-    distanceTag.Size = 13
-
-    local healthBarBg = Drawing.new("Square")
-    healthBarBg.Visible = false
-    healthBarBg.Color = Color3.new(0, 0, 0)
-    healthBarBg.Thickness = 1
-    healthBarBg.Filled = true
-
-    local healthBarFill = Drawing.new("Square")
-    healthBarFill.Visible = false
-    healthBarFill.Thickness = 1
-    healthBarFill.Filled = true
-
-    espObjects[player] = {
-        boxOutline = boxOutline,
-        boxFill = boxFill,
-        nameTag = nameTag,
-        distanceTag = distanceTag,
-        healthBarBg = healthBarBg,
-        healthBarFill = healthBarFill
-    }
-
-    local lines = {}
-    for i = 1, 4 do
-        local l = Drawing.new("Line")
-        l.Visible = false
-        table.insert(lines, l)
-    end
-    eD[player] = {L = lines}
-end
-
-local function removeESP(player)
-    local data = espObjects[player]
-    if data then
-        pcall(function()
-            if data.boxOutline then data.boxOutline:Remove() end
-            if data.boxFill then data.boxFill:Remove() end
-            if data.nameTag then data.nameTag:Remove() end
-            if data.distanceTag then data.distanceTag:Remove() end
-            if data.healthBarBg then data.healthBarBg:Remove() end
-            if data.healthBarFill then data.healthBarFill:Remove() end
-        end)
-        espObjects[player] = nil
-    end
-    if eD[player] then
-        pcall(function()
-            for _, l in pairs(eD[player].L) do l:Remove() end
-        end)
-        eD[player] = nil
-    end
 end
 
 local function isValid(plr)
@@ -462,6 +401,25 @@ RunService.RenderStepped:Connect(function(deltaTime)
     Circle.Position = center
     Circle.Radius = S.FovRadius
     Circle.Visible = S.ShowFov
+
+    if wallhackEnabled then
+        for _, player in ipairs(Players:GetPlayers()) do
+            if player ~= LocalPlayer then
+                if isEnemy(player) then
+                    local char = player.Character
+                    if char and char:FindFirstChild("HumanoidRootPart") then
+                        if not wallhackObjects[player] then
+                            createWallhackESP(player)
+                        end
+                    else
+                        removeWallhackESP(player)
+                    end
+                else
+                    removeWallhackESP(player)
+                end
+            end
+        end
+    end
 
     if S.Aimbot and MyTeam then
         local best = nil
@@ -489,7 +447,7 @@ RunService.RenderStepped:Connect(function(deltaTime)
     end
 
     for _, p in pairs(Players:GetPlayers()) do
-        if p ~= LocalPlayer and p.Character then
+        if p ~= LocalPlayer and not IsSameTeam(p) and p.Character then
             local head = p.Character:FindFirstChild("Head")
             if head then
                 if S.HeadSize > 1 then
@@ -519,139 +477,6 @@ RunService.RenderStepped:Connect(function(deltaTime)
         end
     end
 
-    if not S.ESPEnabled then
-        for _, data in pairs(espObjects) do
-            if data then
-                pcall(function()
-                    data.boxOutline.Visible = false
-                    data.boxFill.Visible = false
-                    data.nameTag.Visible = false
-                    data.distanceTag.Visible = false
-                    data.healthBarBg.Visible = false
-                    data.healthBarFill.Visible = false
-                end)
-            end
-        end
-    else
-        local toRemove = {}
-
-        for player, data in pairs(espObjects) do
-            if not player or not player.Parent or not player.Character then
-                table.insert(toRemove, player)
-            else
-                local char = player.Character
-                local root = char:FindFirstChild("HumanoidRootPart")
-                local head = char:FindFirstChild("Head")
-                local humanoid = char:FindFirstChildOfClass("Humanoid")
-
-                if not root or not head or not humanoid or humanoid.Health <= 0 or not isEnemy(player) then
-                    pcall(function()
-                        data.boxOutline.Visible = false
-                        data.boxFill.Visible = false
-                        data.nameTag.Visible = false
-                        data.distanceTag.Visible = false
-                        data.healthBarBg.Visible = false
-                        data.healthBarFill.Visible = false
-                    end)
-                else
-                    local rootPos, rootOnScreen = Camera:WorldToScreenPoint(root.Position)
-                    local headPos, headOnScreen = Camera:WorldToScreenPoint(head.Position + Vector3.new(0, 0.5, 0))
-
-                    if not rootOnScreen and not headOnScreen then
-                        pcall(function()
-                            data.boxOutline.Visible = false
-                            data.boxFill.Visible = false
-                            data.nameTag.Visible = false
-                            data.distanceTag.Visible = false
-                            data.healthBarBg.Visible = false
-                            data.healthBarFill.Visible = false
-                        end)
-                    else
-                        local height = math.abs(headPos.Y - rootPos.Y)
-                        local width = height / 2
-                        local boxX = rootPos.X - width / 2
-                        local boxY = rootPos.Y
-
-                        pcall(function()
-                            data.boxOutline.Visible = true
-                            data.boxOutline.Position = Vector2.new(boxX, boxY)
-                            data.boxOutline.Size = Vector2.new(width, height)
-
-                            data.boxFill.Visible = true
-                            data.boxFill.Position = Vector2.new(boxX, boxY)
-                            data.boxFill.Size = Vector2.new(width, height)
-
-                            data.nameTag.Visible = true
-                            data.nameTag.Text = player.Name
-                            data.nameTag.Position = Vector2.new(rootPos.X, boxY - 18)
-
-                            local dist = (LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart"))
-                                and (LocalPlayer.Character.HumanoidRootPart.Position - root.Position).Magnitude
-                                or 0
-                            data.distanceTag.Visible = true
-                            data.distanceTag.Text = string.format("%.0f m", dist)
-                            data.distanceTag.Position = Vector2.new(rootPos.X, boxY + height + 2)
-
-                            local healthPercent = math.clamp(humanoid.Health / humanoid.MaxHealth, 0, 1)
-                            local barWidth = 2
-                            local barHeight = height
-                            local barX = boxX - barWidth - 4
-                            local barY = boxY
-
-                            data.healthBarBg.Visible = true
-                            data.healthBarBg.Position = Vector2.new(barX, barY)
-                            data.healthBarBg.Size = Vector2.new(barWidth, barHeight)
-
-                            data.healthBarFill.Visible = true
-                            data.healthBarFill.Position = Vector2.new(barX, barY + barHeight * (1 - healthPercent))
-                            data.healthBarFill.Size = Vector2.new(barWidth, barHeight * healthPercent)
-                            data.healthBarFill.Color = Color3.new(1 - healthPercent, healthPercent, 0)
-                        end)
-                    end
-                end
-            end
-        end
-
-        for _, uid in ipairs(toRemove) do
-            removeESP(uid)
-        end
-    end
-
-    for p, d in pairs(eD) do
-        local ch = p.Character
-        local hrp = ch and ch:FindFirstChild("HumanoidRootPart")
-        if hrp and isEnemy(p) then
-            local hd = ch:FindFirstChild("Head") or hrp
-            local tP, tO = Camera:WorldToViewportPoint(hd.Position + Vector3.new(0, (hd.Size and hd.Size.Y or 1) / 2 + 0.5, 0))
-            local bP, bO = Camera:WorldToViewportPoint(hrp.Position - Vector3.new(0, 3, 0))
-            if S.BoxESP and tO and bO then
-                local w = math.abs(tP.Y - bP.Y) * 0.65
-                local hV = Camera:WorldToViewportPoint(hrp.Position)
-                local w2 = w / 2
-                local xs = {hV.X - w2, hV.X + w2, hV.X + w2, hV.X - w2}
-                local ys = {tP.Y, tP.Y, bP.Y, bP.Y}
-                for i = 1, 4 do
-                    if d.L[i] then
-                        pcall(function()
-                            d.L[i].Color = S.BoxCol
-                            d.L[i].From = Vector2.new(xs[i], ys[i])
-                            d.L[i].To = Vector2.new(xs[(i % 4) + 1], ys[(i % 4) + 1])
-                            d.L[i].Visible = true
-                        end)
-                    end
-                end
-            else
-                for _, l in pairs(d.L) do
-                    if l then pcall(function() l.Visible = false end) end
-                end
-            end
-        else
-            for _, l in pairs(d.L) do
-                if l then pcall(function() l.Visible = false end) end
-            end
-        end
-    end
-
     for _, plr in ipairs(Players:GetPlayers()) do
         if plr ~= LocalPlayer then
             if IsSameTeam(plr) then
@@ -663,7 +488,7 @@ RunService.RenderStepped:Connect(function(deltaTime)
 
                 if S.PlayerChamsEnabled and char and hum and hum.Health > 0 then
                     if not chamsObjects[plr] then
-                        chamsObjects[plr] = CreateHighlight(Color3.fromRGB(255, 0, 0), Color3.fromRGB(255, 255, 255), 0.5)
+                        chamsObjects[plr] = CreateHighlight(Color3.fromRGB(255, 0, 0), 0.5)
                     end
                     if S.HealthBasedChams then
                         chamsObjects[plr].FillColor = GetHealthColor(hum.Health, hum.MaxHealth)
@@ -680,7 +505,7 @@ RunService.RenderStepped:Connect(function(deltaTime)
                     local weapon = debris and debris:FindFirstChild(plr.Name .. "_Weapon")
                     if weapon then
                         if not weaponChamsObjects[plr] then
-                            weaponChamsObjects[plr] = CreateHighlight(Color3.fromRGB(0, 255, 0), Color3.fromRGB(255, 255, 255), 0.5)
+                            weaponChamsObjects[plr] = CreateHighlight(Color3.fromRGB(0, 255, 0), 0.5)
                         end
                         weaponChamsObjects[plr].Adornee = weapon
                     else
@@ -695,23 +520,18 @@ RunService.RenderStepped:Connect(function(deltaTime)
 end)
 
 Players.PlayerAdded:Connect(function(player)
-    createESPForPlayer(player)
     player.CharacterAdded:Connect(function()
-        task.wait(0.5)
-        if not espObjects[player] then
-            createESPForPlayer(player)
+        if wallhackEnabled and isEnemy(player) then
+            task.wait(0.3)
+            createWallhackESP(player)
         end
     end)
 end)
 
 Players.PlayerRemoving:Connect(function(player)
-    removeESP(player)
+    removeWallhackESP(player)
     if chamsObjects[player] then chamsObjects[player]:Destroy() chamsObjects[player] = nil end
     if weaponChamsObjects[player] then weaponChamsObjects[player]:Destroy() weaponChamsObjects[player] = nil end
 end)
 
-for _, player in ipairs(Players:GetPlayers()) do
-    if player ~= LocalPlayer then
-        createESPForPlayer(player)
-    end
-end
+print("Outline-Free & Team-Filtered Clean Wallhack loaded!")
