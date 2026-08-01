@@ -224,7 +224,7 @@ CombatTab:CreateSlider({
 CombatTab:CreateSlider({
 	Name = "Head Size",
 	Description = nil,
-	Range = {1, 20},
+	Range = {1, 3},
 	Increment = 0.5,
 	CurrentValue = 1,
 	Callback = function(Value)
