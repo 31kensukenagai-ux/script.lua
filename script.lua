@@ -1,15 +1,15 @@
 local Luna = loadstring(game:HttpGet("https://raw.githubusercontent.com/Nebula-Softworks/Luna-Interface-Suite/refs/heads/main/source.lua", true))()
 
 local Window = Luna:CreateWindow({
-	Name = "FORCES SİKTİ .gg/berkforces",
+	Name = "Torrycxn&Clooter",
 	Subtitle = nil,
 	LogoID = nil,
 	LoadingEnabled = true,
-	LoadingTitle = "OE HUB",
-	LoadingSubtitle = "by saldı",
+	LoadingTitle = "Torrycxn&Clooter HUB",
+	LoadingSubtitle = "by Torrycxn",
 	ConfigSettings = {
 		RootFolder = nil,
-		ConfigFolder = "OE Hub"
+		ConfigFolder = "Torrycxn&Clooter Hub"
 	},
 	KeySystem = false,
 	KeySettings = {}
