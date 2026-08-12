@@ -3,13 +3,13 @@ local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/twis
 
 --// Window creation
 local Window = Rayfield:CreateWindow({
-   Name = "Blox strike [rework]",
+   Name = "Torry Hub ",
    LoadingTitle = "blox strike script",
-   LoadingSubtitle = "by adamek",
+   LoadingSubtitle = "by Torrycxn",
    ConfigurationSaving = {
       Enabled = true,
       FolderName = nil, -- Create a custom folder for your hub/game
-      FileName = "Big Hub"
+      FileName = "Torry  Hub"
    },
    Discord = {
       Enabled = false,
@@ -24,7 +24,7 @@ local Window = Rayfield:CreateWindow({
       FileName = "Key", -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
       SaveKey = true, -- The user's key will be saved, but if you change the key, they will be unable to use your script
       GrabKeyFromSite = false, -- Local key system (no Pastebin needed)
-      Key = {"1"} -- key-system-online.html sitesinden buraya kopyala
+      Key = {"@TorryMods"} -- key-system-online.html sitesinden buraya kopyala
    }
 })
 --// Services & Globals
