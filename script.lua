@@ -1,7 +1,7 @@
--- free no soo bad
+
 local Rayfield = loadstring(game:HttpGet("https://raw.githubusercontent.com/twistedk1d/BloxStrike/refs/heads/main/Source/UI/source.lua"))()
 
---// Window creation
+
 local Window = Rayfield:CreateWindow({
    Name = "Torry Hub ",
    LoadingTitle = "blox strike script",
@@ -27,7 +27,7 @@ local Window = Rayfield:CreateWindow({
       Key = {"@TorryMods"} -- key-system-online.html sitesinden buraya kopyala
    }
 })
---// Services & Globals
+
 local RS = game:GetService("ReplicatedStorage")
 local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
@@ -40,18 +40,14 @@ local player = Players.LocalPlayer
 local camera = Workspace.CurrentCamera
 local CharactersFolder = Workspace:WaitForChild("Characters", 10)
 
---// ==========================================
---// TABS
---// ==========================================
+
 local Tab_Combat  = Window:CreateTab("Combat", "crosshair")
 local Tab_Skins   = Window:CreateTab("Skins", "swords")
 local Tab_Visuals = Window:CreateTab("Visuals", "eye")
 local Tab_hub  = Window:CreateTab("hub", "eye")
 Tab_Skins:CreateLabel("edited hub ", "code", Color3.fromRGB(80,80,80), false)
 
---// ==========================================
---// SHARED LOGIC (TEAM CHECK)
---// ==========================================
+
 local function getTFolder() return CharactersFolder:FindFirstChild("Terrorists") end
 local function getCTFolder() return CharactersFolder:FindFirstChild("Counter-Terrorists") end
 
@@ -68,9 +64,7 @@ local function getEnemyFolder()
     return nil
 end
 
---// ==========================================
---// AIMBOT & FOV LOGIC
---// ==========================================
+
 local AimbotEnabled = false
 local ShowFOV = false
 local FOV_Radius = 100
@@ -216,9 +210,6 @@ Tab_Combat:CreateSlider({
     Callback = function(Value) Smoothing = Value end
 })
 
---// ==========================================
---// TRIGGERBOT LOGIC
---// ==========================================
 local TriggerBotEnabled = false
 local TriggerBotDelay = 0
 
@@ -273,9 +264,7 @@ task.spawn(function()
     end
 end)
 
---// ==========================================
---// SIMPLE HITBOX LOGIC (NO HOOKS)
---// ==========================================
+
 local HitboxEnabled = false
 local HitboxSize = 3
 local originalHeadSizes = {}
@@ -333,9 +322,7 @@ task.spawn(function()
     end
 end)
 
---// ==========================================
---// BHOP (BUNNY HOP) LOGIC
---// ==========================================
+
 local BhopEnabled = false
 
 Tab_Combat:CreateSection("Movement ")
@@ -359,9 +346,7 @@ RunService.RenderStepped:Connect(function()
     end
 end)
 
---// ==========================================
---// SKINS TAB LOGIC
---// ==========================================
+
 local scriptRunning = false
 local selectedKnife = "Butterfly Knife"
 local spawned = false
@@ -609,7 +594,7 @@ Tab_Skins:CreateToggle({
 })
 
 Tab_Skins:CreateButton({
-    Name = "🎲 Randomize All Skins",
+    Name = " Randomize All Skins",
     Callback = function()
         for weaponName, optionsList in pairs(SkinOptions) do
             if #optionsList > 0 then
@@ -701,9 +686,7 @@ task.spawn(function()
     end
 end)
 
---// ==========================================
---// VISUALS TAB LOGIC (ESP & WORLD)
---// ==========================================
+
 local EspEnabled, EspBox, EspName, EspHealth, EspDistance, EspSkeleton = false, true, true, true, true, false
 local espCache = {}
 
@@ -721,7 +704,7 @@ local function createESP()
     esp.healthOutline.Thickness = 3; esp.healthOutline.Color = Color3.new(0, 0, 0)
     esp.healthBar.Thickness = 1; esp.healthBar.Color = Color3.new(0, 1, 0)
     
-    -- Skeleton lines oluştur
+
     for i = 1, 15 do
         local line = Drawing.new("Line")
         line.Thickness = 2
@@ -826,7 +809,7 @@ RunService.RenderStepped:Connect(function()
                 if EspDistance then esp.distance.Text = "[" .. dist .. "m]"; esp.distance.Position = Vector2.new(rootPos.X, headPos.Y + boxH + 2); esp.distance.Visible = true
                 else esp.distance.Visible = false end
                 
-                -- Skeleton çizimi
+           
                 if EspSkeleton then
                     local lineIndex = 1
                     for _, connection in ipairs(skeletonConnections) do
@@ -852,7 +835,7 @@ RunService.RenderStepped:Connect(function()
                             lineIndex = lineIndex + 1
                         end
                     end
-                    -- Kalan çizgileri gizle
+             
                     for i = lineIndex, #esp.skeleton do
                         esp.skeleton[i].Visible = false
                     end
@@ -862,7 +845,7 @@ RunService.RenderStepped:Connect(function()
                     end
                 end
             else 
-                -- Ekranda değilse tüm ESP elementlerini gizle
+              
                 if esp.boxOutline then esp.boxOutline.Visible = false end
                 if esp.box then esp.box.Visible = false end
                 if esp.name then esp.name.Visible = false end
@@ -878,7 +861,7 @@ RunService.RenderStepped:Connect(function()
         end
     end
     
-    -- Ölü veya artık mevcut olmayan düşmanların ESP'lerini temizle
+   
     for cEnemy, e in pairs(espCache) do
         if not currentAlive[cEnemy] then 
             -- Tüm Drawing objelerini sil
@@ -935,9 +918,7 @@ task.spawn(function()
     end
 end)
 
---// ==========================================
---// HUB TAB LOGIC
---// ==========================================
+
 Tab_hub:CreateSection("Camera & Movement")
 
 local FreecamEnabled = false
@@ -964,25 +945,25 @@ Tab_hub:CreateToggle({
             
             lastMousePos = UserInputService:GetMouseLocation()
             
-            -- Kamera kontrolünü devre dışı bırak
+           
             if freecamConnection then freecamConnection:Disconnect() end
             
             freecamConnection = RunService.RenderStepped:Connect(function(dt)
                 if not FreecamEnabled then return end
                 
-                -- Mouse hareketi ile kamera dönüşü
+                
                 local currentMousePos = UserInputService:GetMouseLocation()
                 if lastMousePos then
                     local mouseDelta = currentMousePos - lastMousePos
                     
-                    -- Yatay ve dikey açı değişimi
+                    
                     local yaw = -mouseDelta.X * mouseSensitivity * 0.01
                     local pitch = -mouseDelta.Y * mouseSensitivity * 0.01
                     
-                    -- Kamerayı döndür
+                    
                     freecamCFrame = freecamCFrame * CFrame.Angles(0, yaw, 0)
                     
-                    -- Pitch için (yukarı-aşağı bakma)
+                    
                     local lookVector = freecamCFrame.LookVector
                     local rightVector = freecamCFrame.RightVector
                     freecamCFrame = freecamCFrame * CFrame.Angles(pitch, 0, 0)
@@ -991,7 +972,7 @@ Tab_hub:CreateToggle({
                 
                 local moveVector = Vector3.new(0, 0, 0)
                 
-                -- WASD kontrolleri
+               
                 if UserInputService:IsKeyDown(Enum.KeyCode.W) then
                     moveVector = moveVector + (freecamCFrame.LookVector * freecamSpeed)
                 end
@@ -1015,7 +996,7 @@ Tab_hub:CreateToggle({
                 camera.CFrame = freecamCFrame
             end)
         else
-            -- Freecam kapalı
+            
             if freecamConnection then 
                 freecamConnection:Disconnect() 
                 freecamConnection = nil
@@ -1023,7 +1004,7 @@ Tab_hub:CreateToggle({
             
             lastMousePos = nil
             
-            -- Kamerayı normale döndür
+           
             if player.Character and player.Character:FindFirstChild("HumanoidRootPart") then
                 camera.CameraSubject = player.Character:FindFirstChildOfClass("Humanoid")
             end
